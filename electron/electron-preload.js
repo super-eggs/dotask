@@ -1,7 +1,7 @@
 const {
     contextBridge,
     ipcRenderer
-} = require("electron");
+import } from "electron";
 
 let reqId = 1;
 let reqInfo = {};
