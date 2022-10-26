@@ -4,8 +4,9 @@
     "description": "DooTask is task management system.",
     "scripts": {
         "start": "./cmd dev",
-        "build": "./cmd prod",
-        "version": "node ./version.js"
+        "build": "vite build",
+        "version": "node ./version.js",
+        "dev": "vite"
     },
     "app": [
         {
