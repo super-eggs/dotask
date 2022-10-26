@@ -31,7 +31,7 @@
 <script>
 import {mapGetters} from "vuex";
 import {Store} from 'le5le-store';
-import DialogWrapper from "./DialogWrapper";
+import DialogWrapper from "./DialogWrapper.vue";
 
 export default {
     name: "ProjectDialog",

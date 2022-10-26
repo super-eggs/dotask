@@ -357,17 +357,17 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import TaskDetail from "./manage/components/TaskDetail";
-import ProjectArchived from "./manage/components/ProjectArchived";
-import TeamManagement from "./manage/components/TeamManagement";
-import ProjectManagement from "./manage/components/ProjectManagement";
-import DrawerOverlay from "../components/DrawerOverlay";
-import DragBallComponent from "../components/DragBallComponent";
-import TaskAdd from "./manage/components/TaskAdd";
-import Report from "./manage/components/Report";
+import TaskDetail from "./manage/components/TaskDetail.vue";
+import ProjectArchived from "./manage/components/ProjectArchived.vue";
+import TeamManagement from "./manage/components/TeamManagement.vue";
+import ProjectManagement from "./manage/components/ProjectManagement.vue";
+import DrawerOverlay from "../components/DrawerOverlay.vue";
+import DragBallComponent from "../components/DragBallComponent.vue";
+import TaskAdd from "./manage/components/TaskAdd.vue";
+import Report from "./manage/components/Report.vue";
 import notificationKoro from "notification-koro1";
 import {Store} from "le5le-store";
-import UserInput from "../components/UserInput";
+import UserInput from "../components/UserInput.vue";
 
 export default {
     components: {

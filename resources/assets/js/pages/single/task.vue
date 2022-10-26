@@ -37,7 +37,7 @@
 }
 </style>
 <script>
-import TaskDetail from "../manage/components/TaskDetail";
+import TaskDetail from "../manage/components/TaskDetail.vue";
 import {mapState} from "vuex";
 
 export default {

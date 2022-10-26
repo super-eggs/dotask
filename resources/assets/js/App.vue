@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import Spinner from "./components/Spinner";
+import Spinner from "./components/Spinner.vue";
 import PreviewImage from "./components/PreviewImage";
 import {mapState} from "vuex";
 

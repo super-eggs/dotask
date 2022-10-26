@@ -124,8 +124,8 @@
 
 <script>
 import {mapState} from "vuex";
-import DialogWrapper from "./components/DialogWrapper";
-import ScrollerY from "../../components/ScrollerY";
+import DialogWrapper from "./components/DialogWrapper.vue";
+import ScrollerY from "../../components/ScrollerY.vue";
 
 export default {
     components: {ScrollerY, DialogWrapper},

@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import WCircle from "../../../components/WCircle";
+import WCircle from "../../../components/WCircle.vue";
 import {mapState} from "vuex";
 
 export default {

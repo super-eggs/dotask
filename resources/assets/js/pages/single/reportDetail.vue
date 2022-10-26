@@ -13,7 +13,7 @@
 }
 </style>
 <script>
-import ReportDetail from "../manage/components/ReportDetail";
+import ReportDetail from "../manage/components/ReportDetail.vue";
 
 export default {
     components: {ReportDetail},

@@ -57,7 +57,7 @@
 
 <script>
     import tinymce from 'tinymce/tinymce';
-    import ImgUpload from "./ImgUpload";
+    import ImgUpload from "./ImgUpload.vue";
     import {mapState} from "vuex";
 
     export default {

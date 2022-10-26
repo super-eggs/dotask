@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import SystemSetting from "./components/SystemSetting";
-import SystemTaskPriority from "./components/SystemTaskPriority";
-import SystemColumnTemplate from "./components/SystemColumnTemplate";
-import SystemEmailSetting from "./components/SystemEmailSetting";
+import SystemSetting from "./components/SystemSetting.vue";
+import SystemTaskPriority from "./components/SystemTaskPriority.vue";
+import SystemColumnTemplate from "./components/SystemColumnTemplate.vue";
+import SystemEmailSetting from "./components/SystemEmailSetting.vue";
 
 export default {
     components: {SystemColumnTemplate, SystemTaskPriority, SystemSetting, SystemEmailSetting},

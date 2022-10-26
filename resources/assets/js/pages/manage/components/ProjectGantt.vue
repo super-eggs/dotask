@@ -40,7 +40,7 @@
 
 <script>
 import {mapGetters, mapState} from "vuex";
-import GanttView from "../../../components/GanttView";
+import GanttView from "../../../components/GanttView.vue";
 
 export default {
     name: 'ProjectGantt',

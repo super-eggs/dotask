@@ -122,11 +122,11 @@
 </template>
 
 <script>
-import DragInput from "../../../components/DragInput";
-import ScrollerY from "../../../components/ScrollerY";
+import DragInput from "../../../components/DragInput.vue";
+import ScrollerY from "../../../components/ScrollerY.vue";
 import {mapState} from "vuex";
-import DialogView from "./DialogView";
-import DialogUpload from "./DialogUpload";
+import DialogView from "./DialogView.vue";
+import DialogUpload from "./DialogUpload.vue";
 import {Store} from "le5le-store";
 
 export default {

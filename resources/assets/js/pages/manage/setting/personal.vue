@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import ImgUpload from "../../../components/ImgUpload";
+import ImgUpload from "../../../components/ImgUpload.vue";
 import {mapState} from "vuex";
 export default {
     components: {ImgUpload},
