@@ -20,8 +20,8 @@
 }
 </style>
 <script>
-import FileContent from "../manage/components/FileContent";
-import FilePreview from "../manage/components/FilePreview";
+import FileContent from "../manage/components/FileContent.vue";
+import FilePreview from "../manage/components/FilePreview.vue";
 
 export default {
     components: {FilePreview, FileContent},

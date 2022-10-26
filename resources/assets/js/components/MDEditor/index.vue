@@ -95,7 +95,7 @@
 </style>
 <script>
     import MarkdownPro from './pro';
-    import ImgUpload from "../ImgUpload";
+    import ImgUpload from "../ImgUpload.vue";
     import {mapState} from "vuex";
 
     export default {

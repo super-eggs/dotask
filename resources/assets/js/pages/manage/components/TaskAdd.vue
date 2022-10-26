@@ -155,9 +155,9 @@
 </template>
 
 <script>
-import TEditor from "../../../components/TEditor";
+import TEditor from "../../../components/TEditor.vue";
 import {mapState} from "vuex";
-import UserInput from "../../../components/UserInput";
+import UserInput from "../../../components/UserInput.vue";
 
 export default {
     name: "TaskAdd",

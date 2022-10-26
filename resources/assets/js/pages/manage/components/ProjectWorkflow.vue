@@ -179,7 +179,7 @@
 
 <script>
 import Draggable from "vuedraggable";
-import UserInput from "../../../components/UserInput";
+import UserInput from "../../../components/UserInput.vue";
 import {mapState} from "vuex";
 
 export default {

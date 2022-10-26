@@ -13,7 +13,7 @@
 }
 </style>
 <script>
-import ReportEdit from "../manage/components/ReportEdit"
+import ReportEdit from "../manage/components/ReportEdit.vue"
 
 export default {
     components: {ReportEdit},

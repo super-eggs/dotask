@@ -20,7 +20,7 @@
 </template>
 
 <script>
-    import ResizeLine from "./ResizeLine";
+    import ResizeLine from "./ResizeLine.vue";
     import TransferDom from '../directives/transfer-dom';
     import {mapState} from "vuex";
 

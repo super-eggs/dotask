@@ -7,8 +7,8 @@
 
 <script>
 import {mapState, mapGetters} from "vuex";
-import ProjectList from "./components/ProjectList";
-import ProjectDialog from "./components/ProjectDialog";
+import ProjectList from "./components/ProjectList.vue";
+import ProjectDialog from "./components/ProjectDialog.vue";
 export default {
     components: {ProjectDialog, ProjectList},
     data() {

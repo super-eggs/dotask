@@ -106,11 +106,11 @@
 </template>
 
 <script>
-import TaskPriority from "./TaskPriority";
-import TaskAddSimple from "./TaskAddSimple";
+import TaskPriority from "./TaskPriority.vue";
+import TaskAddSimple from "./TaskAddSimple.vue";
 import {mapState} from "vuex";
 import {Store} from "le5le-store";
-import TaskMenu from "./TaskMenu";
+import TaskMenu from "./TaskMenu.vue";
 
 export default {
     name: "TaskRow",

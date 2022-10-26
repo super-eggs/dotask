@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import UserInput from "../../../components/UserInput"
+import UserInput from "../../../components/UserInput.vue"
 import {mapState} from "vuex";
 
 const TEditor = () => import('../../../components/TEditor');

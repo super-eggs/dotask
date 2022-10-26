@@ -457,20 +457,20 @@ import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 
 import Draggable from 'vuedraggable'
-import TaskPriority from "./TaskPriority";
-import TaskAdd from "./TaskAdd";
+import TaskPriority from "./TaskPriority.vue";
+import TaskAdd from "./TaskAdd.vue";
 import {mapGetters, mapState} from "vuex";
 import {Store} from 'le5le-store';
-import UserInput from "../../../components/UserInput";
-import TaskAddSimple from "./TaskAddSimple";
-import TaskRow from "./TaskRow";
-import TaskArchived from "./TaskArchived";
-import ProjectLog from "./ProjectLog";
-import DrawerOverlay from "../../../components/DrawerOverlay";
-import ProjectWorkflow from "./ProjectWorkflow";
-import TaskMenu from "./TaskMenu";
-import TaskDeleted from "./TaskDeleted";
-import ProjectGantt from "./ProjectGantt";
+import UserInput from "../../../components/UserInput.vue";
+import TaskAddSimple from "./TaskAddSimple.vue";
+import TaskRow from "./TaskRow.vue";
+import TaskArchived from "./TaskArchived.vue";
+import ProjectLog from "./ProjectLog.vue";
+import DrawerOverlay from "../../../components/DrawerOverlay.vue";
+import ProjectWorkflow from "./ProjectWorkflow.vue";
+import TaskMenu from "./TaskMenu.vue";
+import TaskDeleted from "./TaskDeleted.vue";
+import ProjectGantt from "./ProjectGantt.vue";
 
 export default {
     name: "ProjectList",

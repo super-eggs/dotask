@@ -26,11 +26,11 @@
 </template>
 
 <script>
-import ReportEdit from "./ReportEdit"
-import ReportMy from "./ReportMy"
-import ReportReceive from "./ReportReceive"
-import ReportDetail from "./ReportDetail"
-import DrawerOverlay from "../../../components/DrawerOverlay";
+import ReportEdit from "./ReportEdit.vue"
+import ReportMy from "./ReportMy.vue"
+import ReportReceive from "./ReportReceive.vue"
+import ReportDetail from "./ReportDetail.vue"
+import DrawerOverlay from "../../../components/DrawerOverlay.vue";
 
 export default {
     name: "Report",

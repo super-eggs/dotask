@@ -48,10 +48,10 @@ import 'tui-time-picker/dist/tui-time-picker.css';
 import 'tui-calendar-hi/dist/tui-calendar-hi.css'
 
 import {mapState, mapGetters} from "vuex";
-import Calendar from "./components/Calendar";
+import Calendar from "./components/Calendar.vue";
 import moment from "moment";
 import {Store} from "le5le-store";
-import TaskMenu from "./components/TaskMenu";
+import TaskMenu from "./components/TaskMenu.vue";
 
 export default {
     components: {TaskMenu, Calendar},

@@ -82,7 +82,7 @@
 
 <script>
 import {mapGetters, mapState} from "vuex";
-import TaskMenu from "./components/TaskMenu";
+import TaskMenu from "./components/TaskMenu.vue";
 
 export default {
     components: {TaskMenu},

@@ -357,8 +357,8 @@ Vue.use(VueClipboard)
 
 import {mapState} from "vuex";
 import {sortBy} from "lodash";
-import UserInput from "../../components/UserInput";
-import DrawerOverlay from "../../components/DrawerOverlay";
+import UserInput from "../../components/UserInput.vue";
+import DrawerOverlay from "../../components/DrawerOverlay.vue";
 
 const FilePreview = () => import('./components/FilePreview');
 const FileContent = () => import('./components/FileContent');

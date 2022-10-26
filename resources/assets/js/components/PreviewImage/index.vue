@@ -50,7 +50,7 @@ body {
 </style>
 
 <script>
-import PreviewImageView from "./view";
+import PreviewImageView from "./view.vue";
 import {mapState} from "vuex";
 
 export default {

@@ -429,15 +429,15 @@
 
 <script>
 import {mapState} from "vuex";
-import TEditor from "../../../components/TEditor";
-import TaskPriority from "./TaskPriority";
-import UserInput from "../../../components/UserInput";
-import TaskUpload from "./TaskUpload";
-import DialogWrapper from "./DialogWrapper";
-import ProjectLog from "./ProjectLog";
+import TEditor from "../../../components/TEditor.vue";
+import TaskPriority from "./TaskPriority.vue";
+import UserInput from "../../../components/UserInput.vue";
+import TaskUpload from "./TaskUpload.vue";
+import DialogWrapper from "./DialogWrapper.vue";
+import ProjectLog from "./ProjectLog.vue";
 import {Store} from "le5le-store";
-import TaskMenu from "./TaskMenu";
-import DragInput from "../../../components/DragInput";
+import TaskMenu from "./TaskMenu.vue";
+import DragInput from "../../../components/DragInput.vue";
 
 export default {
     name: "TaskDetail",
