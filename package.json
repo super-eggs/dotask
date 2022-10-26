@@ -48,7 +48,6 @@
         "internal-ip": "^6.2.0",
         "jquery": "^3.6.0",
         "jspdf": "^2.5.0",
-        "laravel-mix": "^6.0.39",
         "le5le-store": "^1.0.7",
         "less": "^4.1.2",
         "less-loader": "^10.2.0",
@@ -65,7 +64,7 @@
         "tinymce": "^5.10.3",
         "tui-calendar-hi": "^1.15.1-5",
         "view-design-hi": "^4.7.0-19",
-        "vue": "^2.6.14",
+        "vue": "^2.7.0",
         "vue-clipboard2": "^0.3.3",
         "vue-emoji-picker": "^1.0.3",
         "vue-kityminder-ggg": "^1.3.10",
@@ -76,6 +75,9 @@
         "vuedraggable": "^2.24.3",
         "vuex": "^3.6.2",
         "webpack": "^5.69.1",
-        "webpack-cli": "^4.9.2"
+        "webpack-cli": "^4.9.2",
+        "vite": "^3.0.2",
+        "laravel-vite-plugin": "^0.6.0",
+        "@vitejs/plugin-vue2": "^1.1.2"
     }
 }
