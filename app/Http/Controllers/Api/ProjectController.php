@@ -59,35 +59,35 @@ class ProjectController extends AbstractController
      * @apiSuccess {String} msg     返回信息（错误描述）
      * @apiSuccess {Object} data    返回数据
      * @apiSuccessExample {json} sampleData:
-    {
-        "data": [
-            {
-                "id": 7,
-                "name": "🏢 产品官网项目",
-                "desc": "设置各小组成员的工作列表，各自领取或领导分配任务，将做好的任务分期归档，方便复盘！",
-                "userid": 1,
-                "dialog_id": 15,
-                "archived_at": null,
-                "archived_userid": 0,
-                "created_at": "2022-01-02 06:23:15",
-                "updated_at": "2022-01-02 07:12:33",
-
-                "owner": 1,         // 是否项目负责人
-                "owner_userid": 1,  // 项目负责人ID
-
-                "task_num": 9,
-                "task_complete": 0,
-                "task_percent": 0,
-                "task_my_num": 8,
-                "task_my_complete": 0,
-                "task_my_percent": 0,
-            },
-        ],
-        "current_page": 1,  // 当前页数
-        "last_page": 1,     // 下一页数
-        "total": 6,         // 总计数（当前查询条件）
-        "total_all": 6      // 总计数（全部）
-    }
+     * {
+     * "data": [
+     * {
+     * "id": 7,
+     * "name": "🏢 产品官网项目",
+     * "desc": "设置各小组成员的工作列表，各自领取或领导分配任务，将做好的任务分期归档，方便复盘！",
+     * "userid": 1,
+     * "dialog_id": 15,
+     * "archived_at": null,
+     * "archived_userid": 0,
+     * "created_at": "2022-01-02 06:23:15",
+     * "updated_at": "2022-01-02 07:12:33",
+     *
+     * "owner": 1,         // 是否项目负责人
+     * "owner_userid": 1,  // 项目负责人ID
+     *
+     * "task_num": 9,
+     * "task_complete": 0,
+     * "task_percent": 0,
+     * "task_my_num": 8,
+     * "task_my_complete": 0,
+     * "task_my_percent": 0,
+     * },
+     * ],
+     * "current_page": 1,  // 当前页数
+     * "last_page": 1,     // 下一页数
+     * "total": 6,         // 总计数（当前查询条件）
+     * "total_all": 6      // 总计数（全部）
+     * }
      */
     public function lists()
     {
@@ -133,6 +133,7 @@ class ProjectController extends AbstractController
         } else {
             $data['total_all'] = $data['total'];
         }
+
         //
         return Base::retSuccess('success', $data);
     }
@@ -151,38 +152,38 @@ class ProjectController extends AbstractController
      * @apiSuccess {String} msg     返回信息（错误描述）
      * @apiSuccess {Object} data    返回数据
      * @apiSuccessExample {json} sampleData:
-    {
-        "id": 7,
-        "name": "🏢 产品官网项目",
-        "desc": "设置各小组成员的工作列表，各自领取或领导分配任务，将做好的任务分期归档，方便复盘！",
-        "userid": 1,
-        "dialog_id": 15,
-        "archived_at": null,
-        "archived_userid": 0,
-        "created_at": "2022-01-02 06:23:15",
-        "updated_at": "2022-01-02 07:12:33",
-
-        "owner": 1,         // 是否项目负责人
-        "owner_userid": 1,  // 项目负责人ID
-
-        "project_user": [   // 项目成员
-            {
-                "id": 2,
-                "project_id": 2,
-                "userid": 1,
-                "owner": 1,
-                "created_at": "2022-01-02 00:55:32",
-                "updated_at": "2022-01-02 00:55:32"
-            }
-        ],
-
-        "task_num": 9,
-        "task_complete": 0,
-        "task_percent": 0,
-        "task_my_num": 8,
-        "task_my_complete": 0,
-        "task_my_percent": 0,
-    }
+     * {
+     * "id": 7,
+     * "name": "🏢 产品官网项目",
+     * "desc": "设置各小组成员的工作列表，各自领取或领导分配任务，将做好的任务分期归档，方便复盘！",
+     * "userid": 1,
+     * "dialog_id": 15,
+     * "archived_at": null,
+     * "archived_userid": 0,
+     * "created_at": "2022-01-02 06:23:15",
+     * "updated_at": "2022-01-02 07:12:33",
+     *
+     * "owner": 1,         // 是否项目负责人
+     * "owner_userid": 1,  // 项目负责人ID
+     *
+     * "project_user": [   // 项目成员
+     * {
+     * "id": 2,
+     * "project_id": 2,
+     * "userid": 1,
+     * "owner": 1,
+     * "created_at": "2022-01-02 00:55:32",
+     * "updated_at": "2022-01-02 00:55:32"
+     * }
+     * ],
+     *
+     * "task_num": 9,
+     * "task_complete": 0,
+     * "task_percent": 0,
+     * "task_my_num": 8,
+     * "task_my_complete": 0,
+     * "task_my_percent": 0,
+     * }
      */
     public function one()
     {
@@ -194,6 +195,7 @@ class ProjectController extends AbstractController
         $data = array_merge($project->toArray(), $project->getTaskStatistics($user->userid), [
             'project_user' => $project->projectUser,
         ]);
+
         //
         return Base::retSuccess('success', $data);
     }
@@ -236,7 +238,7 @@ class ProjectController extends AbstractController
         $columns = explode(",", Request::input('columns'));
         $insertColumns = [];
         $sort = 0;
-        foreach ($columns AS $column) {
+        foreach ($columns as $column) {
             $column = trim($column);
             if ($column) {
                 $insertColumns[] = [
@@ -260,14 +262,14 @@ class ProjectController extends AbstractController
             'desc' => $desc,
             'userid' => $user->userid,
         ]);
-        AbstractModel::transaction(function() use ($flow, $insertColumns, $project) {
+        AbstractModel::transaction(function () use ($flow, $insertColumns, $project) {
             $project->save();
             ProjectUser::createInstance([
                 'project_id' => $project->id,
                 'userid' => $project->userid,
                 'owner' => 1,
             ])->save();
-            foreach ($insertColumns AS $column) {
+            foreach ($insertColumns as $column) {
                 $column['project_id'] = $project->id;
                 ProjectColumn::createInstance($column)->save();
             }
@@ -286,6 +288,7 @@ class ProjectController extends AbstractController
         $data = Project::find($project->id);
         $data->addLog("创建项目");
         $data->pushMsg('add', $data);
+
         return Base::retSuccess('添加成功', $data);
     }
 
@@ -325,7 +328,7 @@ class ProjectController extends AbstractController
         //
         if ($project->name != $name) {
             $project->addLog("修改项目名称", [
-                'change' => [$project->name, $name]
+                'change' => [$project->name, $name],
             ]);
             $project->name = $name;
         }
@@ -335,6 +338,7 @@ class ProjectController extends AbstractController
         }
         $project->save();
         $project->pushMsg('update', $project);
+
         //
         return Base::retSuccess('修改成功', $project);
     }
@@ -368,7 +372,7 @@ class ProjectController extends AbstractController
         //
         $project = Project::userProject($project_id, true, true);
         //
-        $deleteUser = AbstractModel::transaction(function() use ($project, $userid) {
+        $deleteUser = AbstractModel::transaction(function () use ($project, $userid) {
             $array = [];
             foreach ($userid as $uid) {
                 if ($project->joinProject($uid)) {
@@ -382,11 +386,13 @@ class ProjectController extends AbstractController
             }
             $project->syncDialogUser();
             $project->addLog("修改项目成员");
+
             return $deleteUser->toArray();
         });
         //
         $project->pushMsg('delete', null, $deleteUser);
         $project->pushMsg('detail');
+
         return Base::retSuccess('修改成功', ['id' => $project->id]);
     }
 
@@ -411,7 +417,7 @@ class ProjectController extends AbstractController
     {
         User::auth();
         //
-        $project_id = intval(Request::input('project_id'));
+        $project_id = (int) Request::input('project_id');
         $refresh = Request::input('refresh', 'no');
         //
         $project = Project::userProject($project_id, true, true);
@@ -434,9 +440,10 @@ class ProjectController extends AbstractController
                 $projectInvite->save();
             }
         }
+
         return Base::retSuccess('success', [
-            'url' => Base::fillUrl('manage/project/invite?code=' . $projectInvite->code),
-            'num' => $projectInvite->num
+            'url' => Base::fillUrl('manage/project/invite?code='.$projectInvite->code),
+            'num' => $projectInvite->num,
         ]);
     }
 
@@ -469,6 +476,7 @@ class ProjectController extends AbstractController
         if (empty($projectInvite)) {
             return Base::retError('邀请code不存在');
         }
+
         return Base::retSuccess('success', $projectInvite);
     }
 
@@ -515,6 +523,7 @@ class ProjectController extends AbstractController
         //
         $data = $projectInvite->toArray();
         $data['already'] = true;
+
         return Base::retSuccess('加入成功', $data);
     }
 
@@ -546,7 +555,7 @@ class ProjectController extends AbstractController
             return Base::retError('会员不存在');
         }
         //
-        AbstractModel::transaction(function() use ($owner_userid, $project) {
+        AbstractModel::transaction(function () use ($owner_userid, $project) {
             ProjectUser::whereProjectId($project->id)->update(['owner' => 0]);
             ProjectUser::updateInsert([
                 'project_id' => $project->id,
@@ -559,6 +568,7 @@ class ProjectController extends AbstractController
         });
         //
         $project->pushMsg('detail');
+
         return Base::retSuccess('移交成功', ['id' => $project->id]);
     }
 
@@ -592,10 +602,14 @@ class ProjectController extends AbstractController
             // 排序列表
             $index = 0;
             foreach ($sort as $item) {
-                if (!is_array($item)) continue;
-                if (!intval($item['id'])) continue;
+                if (!is_array($item)) {
+                    continue;
+                }
+                if (!intval($item['id'])) {
+                    continue;
+                }
                 ProjectColumn::whereId($item['id'])->whereProjectId($project->id)->update([
-                    'sort' => $index
+                    'sort' => $index,
                 ]);
                 $index++;
             }
@@ -603,14 +617,20 @@ class ProjectController extends AbstractController
         } else {
             // 排序任务
             foreach ($sort as $item) {
-                if (!is_array($item)) continue;
-                if (!intval($item['id'])) continue;
-                if (!is_array($item['task'])) continue;
+                if (!is_array($item)) {
+                    continue;
+                }
+                if (!intval($item['id'])) {
+                    continue;
+                }
+                if (!is_array($item['task'])) {
+                    continue;
+                }
                 $index = 0;
                 foreach ($item['task'] as $task_id) {
                     if (ProjectTask::whereId($task_id)->whereProjectId($project->id)->whereCompleteAt(null)->update([
                         'column_id' => $item['id'],
-                        'sort' => $index
+                        'sort' => $index,
                     ])) {
                         ProjectTask::whereParentId($task_id)->whereProjectId($project->id)->update([
                             'column_id' => $item['id'],
@@ -622,6 +642,7 @@ class ProjectController extends AbstractController
             $project->addLog("调整任务排序");
         }
         $project->pushMsg('sort');
+
         return Base::retSuccess('调整成功');
     }
 
@@ -643,17 +664,18 @@ class ProjectController extends AbstractController
     {
         $user = User::auth();
         //
-        $project_id = intval(Request::input('project_id'));
+        $project_id = (int) Request::input('project_id');
         //
         $project = Project::userProject($project_id, true, false);
         //
-        AbstractModel::transaction(function() use ($user, $project) {
+        AbstractModel::transaction(function () use ($user, $project) {
             $row = ProjectUser::whereProjectId($project->id)->whereUserid($user->userid)->first();
             $row?->exitProject();
             $project->syncDialogUser();
             $project->addLog("退出项目");
             $project->pushMsg('delete', null, $user->userid);
         });
+
         return Base::retSuccess('退出成功', ['id' => $project->id]);
     }
 
@@ -688,6 +710,7 @@ class ProjectController extends AbstractController
         } elseif ($type == 'add') {
             $project->archivedProject(Carbon::now());
         }
+
         return Base::retSuccess('操作成功', ['id' => $project->id]);
     }
 
@@ -714,6 +737,7 @@ class ProjectController extends AbstractController
         $project = Project::userProject($project_id, null, true);
         //
         $project->deleteProject();
+
         return Base::retSuccess('删除成功', ['id' => $project->id]);
     }
 
@@ -746,6 +770,7 @@ class ProjectController extends AbstractController
             ->orderBy('sort')
             ->orderBy('id')
             ->paginate(Base::getPaginate(200, 100));
+
         //
         return Base::retSuccess('success', $list);
     }
@@ -785,13 +810,14 @@ class ProjectController extends AbstractController
             'project_id' => $project->id,
             'name' => $name,
         ]);
-        $column->sort = intval(ProjectColumn::whereProjectId($project->id)->orderByDesc('sort')->value('sort')) + 1;
+        $column->sort = (int) ProjectColumn::whereProjectId($project->id)->orderByDesc('sort')->value('sort') + 1;
         $column->save();
-        $column->addLog("创建列表：" . $column->name);
+        $column->addLog("创建列表：".$column->name);
         //
         $data = ProjectColumn::find($column->id);
         $data->project_task = [];
         $data->pushMsg("add", $data);
+
         return Base::retSuccess('添加成功', $data);
     }
 
@@ -835,6 +861,7 @@ class ProjectController extends AbstractController
         }
         $column->save();
         $column->pushMsg("update", $column);
+
         return Base::retSuccess('修改成功', $column);
     }
 
@@ -866,6 +893,7 @@ class ProjectController extends AbstractController
         Project::userProject($column->project_id, true, true);
         //
         $column->deleteColumn();
+
         return Base::retSuccess('删除成功', ['id' => $column->id]);
     }
 
@@ -952,13 +980,14 @@ class ProjectController extends AbstractController
         }
         //
         if ($name) {
-            $builder->where(function($query) use ($name) {
+            $builder->where(function ($query) use ($name) {
                 $query->where("project_tasks.name", "like", "%{$name}%");
             });
         }
         //
         if (Base::isDateOrTime($time_before)) {
-            $builder->whereNotNull('project_tasks.end_at')->where('project_tasks.end_at', '<', Carbon::parse($time_before));
+            $builder->whereNotNull('project_tasks.end_at')->where('project_tasks.end_at', '<',
+                Carbon::parse($time_before));
         } elseif (is_array($time)) {
             if (Base::isDateOrTime($time[0]) && Base::isDateOrTime($time[1])) {
                 $builder->betweenTime(Carbon::parse($time[0])->startOfDay(), Carbon::parse($time[1])->endOfDay());
@@ -984,12 +1013,17 @@ class ProjectController extends AbstractController
         }
         //
         foreach ($sorts as $column => $direction) {
-            if (!in_array($column, ['complete_at', 'archived_at', 'end_at', 'deleted_at'])) continue;
-            if (!in_array($direction, ['asc', 'desc'])) continue;
-            $builder->orderBy('project_tasks.' . $column, $direction);
+            if (!in_array($column, ['complete_at', 'archived_at', 'end_at', 'deleted_at'])) {
+                continue;
+            }
+            if (!in_array($direction, ['asc', 'desc'])) {
+                continue;
+            }
+            $builder->orderBy('project_tasks.'.$column, $direction);
         }
         //
         $list = $builder->orderByDesc('project_tasks.id')->paginate(Base::getPaginate(200, 100));
+
         //
         return Base::retSuccess('success', $list);
     }
@@ -1018,7 +1052,7 @@ class ProjectController extends AbstractController
         //
         $userid = Base::arrayRetainInt(Request::input('userid'), true);
         $time = Request::input('time');
-        $type = Request::input('type','taskTime');
+        $type = Request::input('type', 'taskTime');
         if (empty($userid) || empty($time)) {
             return Base::retError('参数错误');
         }
@@ -1054,7 +1088,7 @@ class ProjectController extends AbstractController
             ->where('project_task_users.owner', 1)
             ->whereIn('project_task_users.userid', $userid)
             ->betweenTime(Carbon::parse($time[0])->startOfDay(), Carbon::parse($time[1])->endOfDay(), $type);
-        $builder->orderByDesc('project_tasks.id')->chunk(100, function($tasks) use (&$datas) {
+        $builder->orderByDesc('project_tasks.id')->chunk(100, function ($tasks) use (&$datas) {
             /** @var ProjectTask $task */
             foreach ($tasks as $task) {
                 $flowChanges = ProjectTaskFlowChange::whereTaskId($task->id)->get();
@@ -1062,15 +1096,19 @@ class ProjectController extends AbstractController
                 $testTime = 0;//验收/测试时间
                 foreach ($flowChanges as $change) {
                     if (!str_contains($change->before_flow_item_name, 'end')) {
-                        $upOne = ProjectTaskFlowChange::where('id', '<', $change->id)->whereTaskId($task->id)->orderByDesc('id')->first();
+                        $upOne = ProjectTaskFlowChange::where('id', '<',
+                            $change->id)->whereTaskId($task->id)->orderByDesc('id')->first();
                         if ($upOne) {
-                            if (str_contains($change->before_flow_item_name, 'progress') && str_contains($change->before_flow_item_name, '进行')) {
+                            if (str_contains($change->before_flow_item_name,
+                                    'progress') && str_contains($change->before_flow_item_name, '进行')) {
                                 $devCtime = Carbon::parse($change->created_at)->timestamp;
                                 $oCtime = Carbon::parse($upOne->created_at)->timestamp;
                                 $minusNum = $devCtime - $oCtime;
                                 $developTime += $minusNum;
                             }
-                            if (str_contains($change->before_flow_item_name, 'test') || str_contains($change->before_flow_item_name, '测试') || strpos($change->before_flow_item_name, '验收') !== false) {
+                            if (str_contains($change->before_flow_item_name,
+                                    'test') || str_contains($change->before_flow_item_name,
+                                    '测试') || strpos($change->before_flow_item_name, '验收') !== false) {
                                 $testCtime = Carbon::parse($change->created_at)->timestamp;
                                 $tTime = Carbon::parse($upOne->created_at)->timestamp;
                                 $tMinusNum = $testCtime - $tTime;
@@ -1083,9 +1121,12 @@ class ProjectController extends AbstractController
                     $lastChange = ProjectTaskFlowChange::whereTaskId($task->id)->orderByDesc('id')->first();
                     $nowTime = time();
                     $unFinishTime = $nowTime - Carbon::parse($lastChange->created_at)->timestamp;
-                    if (str_contains($lastChange->after_flow_item_name, 'progress') || str_contains($lastChange->after_flow_item_name, '进行')) {
+                    if (str_contains($lastChange->after_flow_item_name,
+                            'progress') || str_contains($lastChange->after_flow_item_name, '进行')) {
                         $developTime += $unFinishTime;
-                    } elseif (str_contains($lastChange->after_flow_item_name, 'test') || str_contains($lastChange->after_flow_item_name, '测试') || strpos($lastChange->after_flow_item_name, '验收') !== false) {
+                    } elseif (str_contains($lastChange->after_flow_item_name,
+                            'test') || str_contains($lastChange->after_flow_item_name,
+                            '测试') || strpos($lastChange->after_flow_item_name, '验收') !== false) {
                         $testTime += $unFinishTime;
                     }
                 }
@@ -1131,42 +1172,44 @@ class ProjectController extends AbstractController
                     $planTime ?: '-',
                     $actualTime ? Base::timeFormat($actualTime) : '-',
                     $overTime,
-                    $developTime > 0? Base::timeFormat($developTime) : '-',
+                    $developTime > 0 ? Base::timeFormat($developTime) : '-',
                     $testTime > 0 ? Base::timeFormat($testTime) : '-',
-                    Base::filterEmoji(User::userid2nickname($task->ownerid)) . " (ID: {$task->ownerid})",
-                    Base::filterEmoji(User::userid2nickname($task->userid)) . " (ID: {$task->userid})",
+                    Base::filterEmoji(User::userid2nickname($task->ownerid))." (ID: {$task->ownerid})",
+                    Base::filterEmoji(User::userid2nickname($task->userid))." (ID: {$task->userid})",
                 ];
             }
         });
         //
         $fileName = User::userid2nickname($userid[0]) ?: $userid[0];
         if (count($userid) > 1) {
-            $fileName .= "等" . count($userid) . "位成员";
+            $fileName .= "等".count($userid)."位成员";
         }
-        $fileName .= '任务统计_' . Base::time() . '.xls';
-        $filePath = "temp/task/export/" . date("Ym", Base::time());
-        $res = BillExport::create()->setHeadings($headings)->setData($datas)->store($filePath . "/" . $fileName);
+        $fileName .= '任务统计_'.Base::time().'.xls';
+        $filePath = "temp/task/export/".date("Ym", Base::time());
+        $res = BillExport::create()->setHeadings($headings)->setData($datas)->store($filePath."/".$fileName);
         if ($res != 1) {
-            return Base::retError('导出失败，' . $fileName . '！');
+            return Base::retError('导出失败，'.$fileName.'！');
         }
-        $xlsPath = storage_path("app/" . $filePath . "/" . $fileName);
-        $zipFile = "app/" . $filePath . "/" . Base::rightDelete($fileName, '.xls'). ".zip";
+        $xlsPath = storage_path("app/".$filePath."/".$fileName);
+        $zipFile = "app/".$filePath."/".Base::rightDelete($fileName, '.xls').".zip";
         $zipPath = storage_path($zipFile);
         if (file_exists($zipPath)) {
             Base::deleteDirAndFile($zipPath, true);
         }
         try {
             Madzipper::make($zipPath)->add($xlsPath)->close();
-        } catch (\Exception) { }
+        } catch (\Exception) {
+        }
         //
         if (file_exists($zipPath)) {
             $base64 = base64_encode(Base::array2string([
                 'file' => $zipFile,
             ]));
             Session::put('task::export:userid', $user->userid);
+
             return Base::retSuccess('success', [
                 'size' => Base::twoFloat(filesize($zipPath) / 1024, true),
-                'url' => Base::fillUrl('api/project/task/down?key=' . urlencode($base64)),
+                'url' => Base::fillUrl('api/project/task/down?key='.urlencode($base64)),
             ]);
         } else {
             return Base::retError('打包失败，请稍后再试...');
@@ -1197,6 +1240,7 @@ class ProjectController extends AbstractController
         if (empty($file) || !file_exists(storage_path($file))) {
             return Base::ajaxError("文件不存在！", [], 0, 502);
         }
+
         return response()->download(storage_path($file));
     }
 
@@ -1231,6 +1275,7 @@ class ProjectController extends AbstractController
         $data = $task->toArray();
         $data['project_name'] = $task->project?->name;
         $data['column_name'] = $task->projectColumn?->name;
+
         return Base::retSuccess('success', $data);
     }
 
@@ -1259,6 +1304,7 @@ class ProjectController extends AbstractController
         if (empty($task->content)) {
             return Base::retSuccess('success', json_decode('{}'));
         }
+
         return Base::retSuccess('success', $task->content->getContentInfo());
     }
 
@@ -1283,6 +1329,7 @@ class ProjectController extends AbstractController
         $task_id = intval(Request::input('task_id'));
         //
         $task = ProjectTask::userTask($task_id, null);
+
         //
         return Base::retSuccess('success', $task->taskFile);
     }
@@ -1316,6 +1363,7 @@ class ProjectController extends AbstractController
         //
         $task->pushMsg('filedelete', $file);
         $file->delete();
+
         //
         return Base::retSuccess('success', $file);
     }
@@ -1352,7 +1400,7 @@ class ProjectController extends AbstractController
         if ($only_update_at == 'yes') {
             return Base::retSuccess('success', [
                 'id' => $file->id,
-                'update_at' => Carbon::parse($file->updated_at)->toDateTimeString()
+                'update_at' => Carbon::parse($file->updated_at)->toDateTimeString(),
             ]);
         }
         //
@@ -1360,6 +1408,7 @@ class ProjectController extends AbstractController
         $data['path'] = $file->getRawOriginal('path');
         //
         ProjectTask::userTask($file->task_id, null);
+
         //
         return Base::retSuccess('success', File::formatFileData($data));
     }
@@ -1394,6 +1443,7 @@ class ProjectController extends AbstractController
         } catch (\Exception $e) {
             abort(403, $e->getMessage() ?: "This file not support download.");
         }
+
         //
         return Response::download(public_path($file->getRawOriginal('path')), $file->name);
     }
@@ -1447,7 +1497,7 @@ class ProjectController extends AbstractController
             ]);
             $column->sort = intval(ProjectColumn::whereProjectId($project->id)->orderByDesc('sort')->value('sort')) + 1;
             $column->save();
-            $column->addLog("创建列表：" . $column->name);
+            $column->addLog("创建列表：".$column->name);
             $newColumn = $column->find($column->id)->toArray();
             $newColumn['project_task'] = [];
         }
@@ -1466,6 +1516,7 @@ class ProjectController extends AbstractController
             $data['new_column'] = $newColumn;
         }
         $task->pushMsg('add', $data);
+
         return Base::retSuccess('添加成功', $data);
     }
 
@@ -1502,10 +1553,11 @@ class ProjectController extends AbstractController
             'project_id' => $task->project_id,
             'column_id' => $task->column_id,
             'times' => [$task->start_at, $task->end_at],
-            'owner' => [User::userid()]
+            'owner' => [User::userid()],
         ]);
         $data = ProjectTask::oneTask($task->id);
         $task->pushMsg('add', $data);
+
         return Base::retSuccess('添加成功', $data);
     }
 
@@ -1551,6 +1603,7 @@ class ProjectController extends AbstractController
         $data = ProjectTask::oneTask($task->id)->toArray();
         $data['update_marking'] = $updateMarking ?: json_decode('{}');
         $task->pushMsg('update', $data);
+
         //
         return Base::retSuccess('修改成功', $data);
     }
@@ -1581,7 +1634,7 @@ class ProjectController extends AbstractController
             return Base::retError('子任务不支持此功能');
         }
         //
-        AbstractModel::transaction(function() use ($task) {
+        AbstractModel::transaction(function () use ($task) {
             if (empty($task->dialog_id)) {
                 $task->lockForUpdate();
                 $dialog = WebSocketDialog::createGroup(null, $task->relationUserids(), 'task');
@@ -1596,6 +1649,7 @@ class ProjectController extends AbstractController
         });
         //
         $task->pushMsg('dialog');
+
         return Base::retSuccess('success', [
             'id' => $task->id,
             'dialog_id' => $task->dialog_id,
@@ -1637,6 +1691,7 @@ class ProjectController extends AbstractController
         } elseif ($type == 'add') {
             $task->archivedTask(Carbon::now());
         }
+
         return Base::retSuccess('操作成功', [
             'id' => $task->id,
             'archived_at' => $task->archived_at,
@@ -1671,9 +1726,11 @@ class ProjectController extends AbstractController
         $task = ProjectTask::userTask($task_id, null, $type !== 'recovery', true);
         if ($type == 'recovery') {
             $task->recoveryTask();
+
             return Base::retSuccess('操作成功', ['id' => $task->id]);
         } else {
             $task->deleteTask();
+
             return Base::retSuccess('删除成功', ['id' => $task->id]);
         }
     }
@@ -1712,13 +1769,14 @@ class ProjectController extends AbstractController
             if (empty($newFlowItem)) {
                 return Base::retError('流程不存在或已被删除');
             }
-            return AbstractModel::transaction(function() use ($rawData, $task, $newFlowItem) {
+
+            return AbstractModel::transaction(function () use ($rawData, $task, $newFlowItem) {
                 $currentFlowItem = $task->flow_item_id ? ProjectFlowItem::find($task->flow_item_id) : null;
                 //
                 $task->flow_item_id = $newFlowItem->id;
                 $task->flow_item_name = $newFlowItem->name;
                 $task->addLog("重置{任务}状态", [
-                    'change' => [$currentFlowItem?->name, $newFlowItem->name]
+                    'change' => [$currentFlowItem?->name, $newFlowItem->name],
                 ]);
                 //
                 $updateMarking = [];
@@ -1726,9 +1784,10 @@ class ProjectController extends AbstractController
                 $task->updateTask($data, $updateMarking);
                 //
                 $data = ProjectTask::oneTask($task->id)->toArray();
-                $data["flow_item_name"] = $newFlowItem->status . "|" . $newFlowItem->name;
+                $data["flow_item_name"] = $newFlowItem->status."|".$newFlowItem->name;
                 $data['update_marking'] = $updateMarking ?: json_decode('{}');
                 $task->pushMsg('update', $data);
+
                 //
                 return Base::retSuccess('重置成功', $data);
             });
@@ -1757,9 +1816,11 @@ class ProjectController extends AbstractController
         //
         $task_id = intval(Request::input('task_id'));
         //
-        $projectTask = ProjectTask::select(['id', 'project_id', 'complete_at', 'flow_item_id', 'flow_item_name'])->withTrashed()->find($task_id);
+        $projectTask = ProjectTask::select([
+            'id', 'project_id', 'complete_at', 'flow_item_id', 'flow_item_name',
+        ])->withTrashed()->find($task_id);
         if (empty($projectTask)) {
-            return Base::retError('任务不存在', [ 'task_id' => $task_id ], -4002);
+            return Base::retError('任务不存在', ['task_id' => $task_id], -4002);
         }
         //
         $projectFlowItem = $projectTask->flow_item_id ? ProjectFlowItem::with(['projectFlow'])->find($projectTask->flow_item_id) : null;
@@ -1776,7 +1837,9 @@ class ProjectController extends AbstractController
             ]);
         }
         //
-        $turns = ProjectFlowItem::select(['id', 'name', 'status', 'turns'])->whereFlowId($projectFlow->id)->orderBy('sort')->get();
+        $turns = ProjectFlowItem::select([
+            'id', 'name', 'status', 'turns',
+        ])->whereFlowId($projectFlow->id)->orderBy('sort')->get();
         if (empty($projectFlowItem)) {
             $data = [
                 'task_id' => $projectTask->id,
@@ -1815,6 +1878,7 @@ class ProjectController extends AbstractController
                 'turns' => $turns,
             ];
         }
+
         //
         return Base::retSuccess('success', $data);
     }
@@ -1842,6 +1906,7 @@ class ProjectController extends AbstractController
         $project = Project::userProject($project_id, true);
         //
         $list = ProjectFlow::with(['ProjectFlowItem'])->whereProjectId($project->id)->get();
+
         return Base::retSuccess('success', $list);
     }
 
@@ -1875,6 +1940,7 @@ class ProjectController extends AbstractController
         }
         //
         $project = Project::userProject($project_id, true, true);
+
         //
         return Base::retSuccess('保存成功', $project->addFlow($flows));
     }
@@ -1900,13 +1966,15 @@ class ProjectController extends AbstractController
         $project_id = intval(Request::input('project_id'));
         //
         $project = Project::userProject($project_id, true, true);
+
         //
-        return AbstractModel::transaction(function() use ($project) {
-            ProjectFlow::whereProjectId($project->id)->chunk(100, function($list) {
+        return AbstractModel::transaction(function () use ($project) {
+            ProjectFlow::whereProjectId($project->id)->chunk(100, function ($list) {
                 foreach ($list as $item) {
                     $item->deleteFlow();
                 }
             });
+
             return Base::retSuccess('删除成功');
         });
     }
@@ -1953,12 +2021,14 @@ class ProjectController extends AbstractController
             }
             $log->time = [
                 'ymd' => date(date("Y", $timestamp) == date("Y", Base::time()) ? "m-d" : "Y-m-d", $timestamp),
-                'hi' => date("h:i", $timestamp) ,
-                'week' => "周" . Base::getTimeWeek($timestamp),
+                'hi' => date("h:i", $timestamp),
+                'week' => "周".Base::getTimeWeek($timestamp),
                 'segment' => Base::getTimeDayeSegment($timestamp),
             ];
+
             return $log;
         });
+
         //
         return Base::retSuccess('success', $list);
     }
@@ -1987,6 +2057,7 @@ class ProjectController extends AbstractController
         }
         $projectUser->top_at = $projectUser->top_at ? null : Carbon::now();
         $projectUser->save();
+
         return Base::retSuccess("success", [
             'id' => $projectUser->project_id,
             'top_at' => $projectUser->top_at?->toDateTimeString(),

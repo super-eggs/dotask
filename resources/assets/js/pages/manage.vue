@@ -674,7 +674,7 @@ export default {
 
         userId: {
             handler() {
-                this.$store.dispatch("websocketConnection")
+                // this.$store.dispatch("websocketConnection")
             },
             immediate: true
         },

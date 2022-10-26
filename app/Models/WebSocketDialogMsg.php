@@ -225,7 +225,7 @@ class WebSocketDialogMsg extends AbstractModel
             $dialogMsg->dialog_id = $dialog->id;
             $dialogMsg->save();
         });
-        Task::deliver(new WebSocketDialogMsgTask($dialogMsg->id));
+//        Task::deliver(new WebSocketDialogMsgTask($dialogMsg->id));
         return Base::retSuccess('发送成功', $dialogMsg);
     }
 }

@@ -19,7 +19,7 @@ class Base
 
     /**
      * 访问日志
-     * @param string $title
+     * @param  string  $title
      */
     public static function addTmp($title = '')
     {
@@ -36,14 +36,14 @@ class Base
             'input' => Request::input(),
             'query' => Request::query(),
             'post' => Request::post(),
-            'time' => date("Y-m-d H:i:s", time())
+            'time' => date("Y-m-d H:i:s", time()),
         ], $title);
     }
 
     /**
      * 添加日志
-     * @param string|array $log
-     * @param string $title
+     * @param  string|array  $log
+     * @param  string  $title
      */
     public static function addLog($log, $title = '')
     {
@@ -54,7 +54,7 @@ class Base
             $log = self::array2json($log, JSON_UNESCAPED_UNICODE);
         }
         Tmp::createInstance([
-            'name' => 'log_' . ($title ?: date("Y-m-d H:i:s", time())),
+            'name' => 'log_'.($title ?: date("Y-m-d H:i:s", time())),
             'value' => date("Y-m-d H:i:s", time()),
             'content' => $log,
         ])->save();
@@ -70,8 +70,10 @@ class Base
             $file = base_path('package.json');
             if (file_exists($file)) {
                 $package = json_decode(file_get_contents($file), true);
+
                 return is_array($package) ? $package : [];
             }
+
             return [];
         });
     }
@@ -83,6 +85,7 @@ class Base
     public static function getVersion()
     {
         $package = self::getPackage();
+
         return $package['version'] ?? '1.0.0';
     }
 
@@ -96,18 +99,19 @@ class Base
         if (!isset($_A["__static_client_version"])) {
             $_A["__static_client_version"] = Request::header('version') ?: '0.0.1';
         }
+
         return $_A["__static_client_version"];
     }
 
     /**
      * 检查客户端版本
-     * @param string $min 最小版本
+     * @param  string  $min  最小版本
      * @return void
      */
     public static function checkClientVersion($min)
     {
         if (version_compare(Base::getClientVersion(), $min, '<')) {
-            throw new ApiException('当前版本 (v' . Base::getClientVersion() . ') 过低');
+            throw new ApiException('当前版本 (v'.Base::getClientVersion().') 过低');
         }
     }
 
@@ -116,7 +120,8 @@ class Base
      * @param $domain
      * @return bool
      */
-    public static function is_domain($domain){
+    public static function is_domain($domain)
+    {
         $str = "/^(?:[A-za-z0-9-]+\.)+[A-za-z]{2,4}(?:[\/\?#][\/=\?%\-&~`@[\]\':+!\.#\w]*)?$/";
         if (!preg_match($str, $domain)) {
             return false;
@@ -138,12 +143,13 @@ class Base
                 return false;
             }
         }
+
         return filter_var($cidr, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) !== false;
     }
 
     /**
      * 判断IP是否正确
-     * @param string $ip
+     * @param  string  $ip
      * @return bool
      */
     public static function is_ipv4($ip)
@@ -153,7 +159,7 @@ class Base
 
     /**
      * 判断是否外网IP
-     * @param string $ip
+     * @param  string  $ip
      * @return bool
      */
     public static function is_extranet_ip($ip)
@@ -161,12 +167,13 @@ class Base
         if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
             return false;
         }
+
         return !self::is_internal_ip($ip);
     }
 
     /**
      * 判断是否内网IP
-     * @param string $ip
+     * @param  string  $ip
      * @return bool
      */
     public static function is_internal_ip($ip)
@@ -182,14 +189,15 @@ class Base
         $net_a = ip2long('10.255.255.255') >> 24;           //A类网预留ip的网络地址
         $net_b = ip2long('172.31.255.255') >> 20;           //B类网预留ip的网络地址
         $net_c = ip2long('192.168.255.255') >> 16;          //C类网预留ip的网络地址
+
         return $ip >> 24 === $net_l || $ip >> 24 === $net_a || $ip >> 20 === $net_b || $ip >> 16 === $net_c;
     }
 
     /**
      * 获取数组值
      * @param $obj
-     * @param string $key
-     * @param string $default
+     * @param  string  $key
+     * @param  string  $default
      * @return array|string
      */
     public static function val($obj, $key = '', $default = '')
@@ -214,7 +222,10 @@ class Base
                 }
             }
         }
-        if ($default && empty($obj)) $obj = $default;
+        if ($default && empty($obj)) {
+            $obj = $default;
+        }
+
         return $obj;
     }
 
@@ -229,7 +240,7 @@ class Base
 
     /**
      * 跳转
-     * @param null $url
+     * @param  null  $url
      * @return \Illuminate\Http\RedirectResponse
      */
     public static function goUrl($url = null)
@@ -237,6 +248,7 @@ class Base
         if (empty($url)) {
             $url = Base::getUrl();
         }
+
         return Redirect::to($url, 301);
     }
 
@@ -255,8 +267,8 @@ class Base
     /**
      * 补零
      * @param $str
-     * @param int $length 长度
-     * @param bool $before 是否补在前面
+     * @param  int  $length  长度
+     * @param  bool  $before  是否补在前面
      * @return string
      */
     public static function zeroFill($str, $length = 0, $before = true)
@@ -269,10 +281,11 @@ class Base
             $_str .= '0';
         }
         if ($before) {
-            $_ret = substr($_str . $str, $length * -1);
+            $_ret = substr($_str.$str, $length * -1);
         } else {
-            $_ret = substr($str . $_str, 0, $length);
+            $_ret = substr($str.$_str, 0, $length);
         }
+
         return $_ret;
     }
 
@@ -292,6 +305,7 @@ class Base
             @mkdir($path);
             @chmod($path, 0777);
         }
+
         return $path;
     }
 
@@ -307,17 +321,17 @@ class Base
     /**
      * 删除文件夹及文件夹下所有的文件
      * @param $dirName
-     * @param bool $undeleteDir 不删除文件夹（只删除文件）
+     * @param  bool  $undeleteDir  不删除文件夹（只删除文件）
      */
     public static function deleteDirAndFile($dirName, $undeleteDir = false)
     {
         if ($handle = opendir($dirName)) {
             while (false !== ($item = readdir($handle))) {
                 if ($item != "." && $item != "..") {
-                    if (is_dir($dirName . "/" . $item)) {
-                        self::deleteDirAndFile($dirName . "/" . $item);
+                    if (is_dir($dirName."/".$item)) {
+                        self::deleteDirAndFile($dirName."/".$item);
                     } else {
-                        @unlink($dirName . "/" . $item);
+                        @unlink($dirName."/".$item);
                     }
                 }
             }
@@ -331,7 +345,7 @@ class Base
     /**
      * 去除html
      * @param $text
-     * @param int $length
+     * @param  int  $length
      * @return string
      */
     public static function getHtml($text, $length = 250)
@@ -342,34 +356,40 @@ class Base
     /**
      *
      * 截取字符串
-     * @param string $string 字符串
-     * @param int $length 截取长度
-     * @param int $start 何处开始
-     * @param string $dot 超出尾部添加
-     * @param string $charset 默认编码
+     * @param  string  $string  字符串
+     * @param  int  $length  截取长度
+     * @param  int  $start  何处开始
+     * @param  string  $dot  超出尾部添加
+     * @param  string  $charset  默认编码
      * @return string
      */
     public static function cutStr($string, $length, $start = 0, $dot = '', $charset = 'utf-8')
     {
         if (strtolower($charset) == 'utf-8') {
-            if (Base::getStrlen($string) <= $length) return $string;
+            if (Base::getStrlen($string) <= $length) {
+                return $string;
+            }
             $strcut = Base::utf8Substr($string, $length, $start);
-            return $strcut . $dot;
+
+            return $strcut.$dot;
         } else {
             $length = $length * 2;
-            if (strlen($string) <= $length) return $string;
+            if (strlen($string) <= $length) {
+                return $string;
+            }
             $strcut = '';
             for ($i = 0; $i < $length; $i++) {
-                $strcut .= ord($string[$i]) > 127 ? $string[$i] . $string[++$i] : $string[$i];
+                $strcut .= ord($string[$i]) > 127 ? $string[$i].$string[++$i] : $string[$i];
             }
         }
-        return $strcut . $dot;
+
+        return $strcut.$dot;
     }
 
     /**
      * PHP获取字符串中英文混合长度
-     * @param string $str 字符串
-     * @param string $charset 编码
+     * @param  string  $str  字符串
+     * @param  string  $charset  编码
      * @return float            返回长度，1中文=1位，2英文=1位
      */
     public static function getStrlen($str, $charset = 'utf-8')
@@ -387,14 +407,15 @@ class Base
         }
         $enNum = $num - ($cnNum * 2);
         $number = ($enNum / 2) + $cnNum;
+
         return ceil($number);
     }
 
     /**
      * PHP截取UTF-8字符串，解决半字符问题。
-     * @param string $str 源字符串
-     * @param int $len 左边的子串的长度
-     * @param int $start 何处开始
+     * @param  string  $str  源字符串
+     * @param  int  $len  左边的子串的长度
+     * @param  int  $start  何处开始
      * @return string           取出的字符串, 当$len小于等于0时, 会返回整个字符串
      */
     public static function utf8Substr($str, $len, $start = 0)
@@ -414,13 +435,14 @@ class Base
                 $str = substr($str, 1);
             }
         }
+
         return join(array_slice($new_str, $start));
     }
 
     /**
      * 将字符串转换为数组
-     * @param string $data 字符串
-     * @param array $default 为空时返回的默认数组
+     * @param  string  $data  字符串
+     * @param  array  $default  为空时返回的默认数组
      * @return    array    返回数组格式，如果，data为空，则返回$default
      */
     public static function string2array($data, $default = [])
@@ -429,7 +451,9 @@ class Base
             return $data ?: $default;
         }
         $data = trim($data);
-        if ($data == '') return $default;
+        if ($data == '') {
+            return $default;
+        }
         if (str_starts_with(strtolower($data), 'array') && strtolower($data) !== 'array') {
             @ini_set('display_errors', 'on');
             @eval("\$array = $data;");
@@ -440,19 +464,24 @@ class Base
             }
             $array = json_decode($data, true);
         }
+
         return isset($array) && is_array($array) && $data ? $array : $default;
     }
 
     /**
      * 将数组转换为字符串
-     * @param array $data 数组
-     * @param int $isformdata 如果为0，则不使用new_stripslashes处理，可选参数，默认为1
+     * @param  array  $data  数组
+     * @param  int  $isformdata  如果为0，则不使用new_stripslashes处理，可选参数，默认为1
      * @return    string    返回字符串，如果，data为空，则返回空
      */
     public static function array2string($data, $isformdata = 1)
     {
-        if ($data == '' || empty($data)) return '';
-        if ($isformdata) $data = Base::newStripslashes($data);
+        if ($data == '' || empty($data)) {
+            return '';
+        }
+        if ($isformdata) {
+            $data = Base::newStripslashes($data);
+        }
         if (version_compare(PHP_VERSION, '5.3.0', '<')) {
             return Base::newAddslashes(json_encode($data));
         } else {
@@ -462,15 +491,20 @@ class Base
 
     /**
      * 将数组转换为字符串 (格式化)
-     * @param array $data 数组
-     * @param int $isformdata 如果为0，则不使用new_stripslashes处理，可选参数，默认为1
+     * @param  array  $data  数组
+     * @param  int  $isformdata  如果为0，则不使用new_stripslashes处理，可选参数，默认为1
      * @return    string    返回字符串，如果，data为空，则返回空
      */
     public static function array2string_discard($data, $isformdata = 1)
     {
-        if ($data == '' || empty($data)) return '';
-        if ($isformdata) $data = Base::newStripslashes($data);
-        return var_export($data, TRUE);
+        if ($data == '' || empty($data)) {
+            return '';
+        }
+        if ($isformdata) {
+            $data = Base::newStripslashes($data);
+        }
+
+        return var_export($data, true);
     }
 
     /**
@@ -485,6 +519,7 @@ class Base
         }
         try {
             $array = json_decode($string, true);
+
             return is_array($array) ? $array : [];
         } catch (Exception $e) {
             return [];
@@ -494,7 +529,7 @@ class Base
     /**
      * array转换成功json字符串
      * @param $array
-     * @param int $options
+     * @param  int  $options
      * @return string
      */
     public static function array2json($array, $options = 0)
@@ -511,8 +546,8 @@ class Base
 
     /**
      * 叠加数组或对象
-     * @param object|array $array
-     * @param array $over
+     * @param  object|array  $array
+     * @param  array  $over
      * @return object|array
      */
     public static function array_over(&$array, $over = [])
@@ -527,6 +562,7 @@ class Base
                 }
             }
         }
+
         return $array;
     }
 
@@ -544,6 +580,7 @@ class Base
                 break;
             }
         }
+
         return $val;
     }
 
@@ -561,19 +598,22 @@ class Base
                 break;
             }
         }
+
         return $val;
     }
 
     /**
      * array转xml
      * @param $data
-     * @param string $root 根节点
+     * @param  string  $root  根节点
      * @return string
      */
     public static function array2xml($data, $root = '<xml>')
     {
         $str = "";
-        if ($root) $str .= $root;
+        if ($root) {
+            $str .= $root;
+        }
         foreach ($data as $key => $val) {
             if (is_array($val)) {
                 $child = self::array2xml($val, false);
@@ -582,13 +622,16 @@ class Base
                 $str .= "<$key><![CDATA[$val]]></$key>";
             }
         }
-        if ($root) $str .= '</xml>';
+        if ($root) {
+            $str .= '</xml>';
+        }
+
         return $str;
     }
 
     /**
      * xml转json
-     * @param string $source 传的是文件，还是xml的string的判断
+     * @param  string  $source  传的是文件，还是xml的string的判断
      * @return string
      */
     public static function xml2json($source)
@@ -596,14 +639,15 @@ class Base
         if (is_file($source)) {
             $xml_array = @simplexml_load_file($source);
         } else {
-            $xml_array = @simplexml_load_string($source, NULL, LIBXML_NOCDATA);
+            $xml_array = @simplexml_load_string($source, null, LIBXML_NOCDATA);
         }
+
         return json_encode($xml_array);
     }
 
     /**
      * 返回经stripslashes处理过的字符串或数组
-     * @param array|string $string 需要处理的字符串或数组
+     * @param  array|string  $string  需要处理的字符串或数组
      * @return array|int|string
      */
     public static function newStripslashes($string)
@@ -613,13 +657,16 @@ class Base
         } elseif (!is_array($string)) {
             return stripslashes($string);
         }
-        foreach ($string as $key => $val) $string[$key] = Base::newStripslashes($val);
+        foreach ($string as $key => $val) {
+            $string[$key] = Base::newStripslashes($val);
+        }
+
         return $string;
     }
 
     /**
      * 返回经addslashes处理过的字符串或数组
-     * @param array|string $string 需要处理的字符串或数组
+     * @param  array|string  $string  需要处理的字符串或数组
      * @return array|int|string
      */
     public static function newAddslashes($string)
@@ -629,7 +676,10 @@ class Base
         } elseif (!is_array($string)) {
             return addslashes($string);
         }
-        foreach ($string as $key => $val) $string[$key] = Base::newAddslashes($val);
+        foreach ($string as $key => $val) {
+            $string[$key] = Base::newAddslashes($val);
+        }
+
         return $string;
     }
 
@@ -640,8 +690,13 @@ class Base
      */
     public static function newTrim($string)
     {
-        if (!is_array($string)) return trim($string);
-        foreach ($string as $key => $val) $string[$key] = Base::newTrim($val);
+        if (!is_array($string)) {
+            return trim($string);
+        }
+        foreach ($string as $key => $val) {
+            $string[$key] = Base::newTrim($val);
+        }
+
         return $string;
     }
 
@@ -652,61 +707,58 @@ class Base
      */
     public static function newIntval($string)
     {
-        if (!is_array($string)) return intval($string);
-        foreach ($string as $key => $val) $string[$key] = Base::newIntval($val);
+        if (!is_array($string)) {
+            return intval($string);
+        }
+        foreach ($string as $key => $val) {
+            $string[$key] = Base::newIntval($val);
+        }
+
         return $string;
     }
 
     /**
      * 重MD5加密
      * @param $text
-     * @param string $pass
+     * @param  string  $pass
      * @return string
      */
     public static function md52($text, $pass = '')
     {
-        $_text = md5($text) . $pass;
+        $_text = md5($text).$pass;
+
         return md5($_text);
     }
 
     /**
      * 随机字符串
-     * @param int $length 随机字符长度
-     * @param string $type
+     * @param  int  $length  随机字符长度
+     * @param  string  $type
      * @return string 1数字、2大小写字母、21小写字母、22大写字母、默认全部;
      */
     public static function generatePassword($length = 8, $type = '')
     {
         // 密码字符集，可任意添加你需要的字符
-        switch ($type) {
-            case '1':
-                $chars = '0123456789';
-                break;
-            case '2':
-                $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                break;
-            case '21':
-                $chars = 'abcdefghijklmnopqrstuvwxyz';
-                break;
-            case '22':
-                $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                break;
-            default:
-                $chars = $type ?: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-                break;
-        }
+        $chars = match ($type) {
+            '1' => '0123456789',
+            '2' => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            '21' => 'abcdefghijklmnopqrstuvwxyz',
+            '22' => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            default => $type ?: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+        };
         $passwordstr = '';
         $max = strlen($chars) - 1;
         for ($i = 0; $i < $length; $i++) {
             $passwordstr .= $chars[mt_rand(0, $max)];
         }
+
         return $passwordstr;
     }
 
     /**
      * 同 generate_password 默认获取纯数字
      * @param $length
-     * @param string $chars
+     * @param  string  $chars
      * @return string
      */
     public static function strRandom($length, $chars = '0123456789')
@@ -716,8 +768,8 @@ class Base
 
     /**
      * 判断两个地址域名是否相同
-     * @param string $var1
-     * @param string $var2
+     * @param  string  $var1
+     * @param  string  $var2
      * @return bool
      */
     public static function hostContrast($var1, $var2)
@@ -734,12 +786,13 @@ class Base
         if (isset($arr2['host'])) {
             $host2 = $arr2['host'];
         }
+
         return $host1 == $host2;
     }
 
     /**
      * 获取url域名
-     * @param string $var
+     * @param  string  $var
      * @return mixed
      */
     public static function getHost($var = '')
@@ -748,12 +801,13 @@ class Base
             $var = url("/");
         }
         $arr = parse_url($var);
+
         return $arr['host'];
     }
 
     /**
      * 相对路径补全
-     * @param string|array $str
+     * @param  string|array  $str
      * @return string|array
      */
     public static function fillUrl($str = '')
@@ -763,6 +817,7 @@ class Base
             foreach ($str as $key => $item) {
                 $str[$key] = Base::fillUrl($item);
             }
+
             return $str;
         }
         if (empty($str)) {
@@ -776,21 +831,21 @@ class Base
             str_starts_with(str_replace(' ', '', $str), "data:image/")
         ) {
             return $str;
-        } else {
-            if ($_A['__fill_url_remote_url'] === true) {
-                return "{{RemoteURL}}" . $str;
-            }
-            try {
-                return url($str);
-            } catch (\Throwable) {
-                return self::getSchemeAndHost() . "/" . $str;
-            }
+        }
+
+        if ($_A['__fill_url_remote_url'] === true) {
+            return "{{RemoteURL}}".$str;
+        }
+        try {
+            return url($str);
+        } catch (\Throwable) {
+            return self::getSchemeAndHost()."/".$str;
         }
     }
 
     /**
      * 反 fillUrl
-     * @param string $str
+     * @param  string  $str
      * @return array|string
      */
     public static function unFillUrl($str = '')
@@ -799,6 +854,7 @@ class Base
             foreach ($str as $key => $item) {
                 $str[$key] = Base::unFillUrl($item);
             }
+
             return $str;
         }
         try {
@@ -806,7 +862,8 @@ class Base
         } catch (\Throwable) {
             $find = self::getSchemeAndHost();
         }
-        return Base::leftDelete($str, $find . '/');
+
+        return Base::leftDelete($str, $find.'/');
     }
 
     /**
@@ -816,6 +873,7 @@ class Base
     public static function getSchemeAndHost()
     {
         $scheme = isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443' ? 'https://' : 'http://';
+
         return $scheme.($_SERVER['HTTP_HOST'] ?? '');
     }
 
@@ -830,17 +888,18 @@ class Base
         if ($parames && is_array($parames)) {
             $array = [];
             foreach ($parames as $key => $val) {
-                $array[] = $key . "=" . $val;
+                $array[] = $key."=".$val;
             }
             if ($array) {
                 $query = implode("&", $array);
                 if (str_contains($url, "?")) {
-                    $url .= "&" . $query;
+                    $url .= "&".$query;
                 } else {
-                    $url .= "?" . $query;
+                    $url .= "?".$query;
                 }
             }
         }
+
         return $url;
     }
 
@@ -861,15 +920,16 @@ class Base
                     str_starts_with(str_replace(' ', '', $value), "data:image/")
                 )) {
                     if (str_starts_with($value, "//")) {
-                        $value = "http:" . $value;
+                        $value = "http:".$value;
                     } elseif (str_starts_with($value, "/")) {
                         $value = substr($value, 1);
                     }
-                    $newValue = "<img" . $matchs[1][$index] . "src=" . $matchs[2][$index] . self::fillUrl($value) . $matchs[2][$index];
+                    $newValue = "<img".$matchs[1][$index]."src=".$matchs[2][$index].self::fillUrl($value).$matchs[2][$index];
                     $content = str_replace($matchs[0][$index], $newValue, $content);
                 }
             }
         }
+
         return $content;
     }
 
@@ -886,13 +946,14 @@ class Base
             $delimiter = ',';
         }
         $array = is_array($string) ? $string : explode($delimiter, $string);
+
         return self::arrayRetainInt($array);
     }
 
     /**
      * 数组只保留数字的
      * @param $array
-     * @param bool $int 是否格式化值
+     * @param  bool  $int  是否格式化值
      * @return array
      */
     public static function arrayRetainInt($array, $int = false)
@@ -904,6 +965,7 @@ class Base
                 $array[$k] = intval($v);
             }
         }
+
         return array_values($array);
     }
 
@@ -918,12 +980,13 @@ class Base
             return false;
         }
         $json = self::array2json($array);
-        return (bool)self::leftExists($json, '[');
+
+        return (bool) self::leftExists($json, '[');
     }
 
     /**
      * 检测日期格式
-     * @param string $str 需要检测的字符串
+     * @param  string  $str  需要检测的字符串
      * @return bool
      */
     public static function isDate($str)
@@ -943,7 +1006,7 @@ class Base
 
     /**
      * 检测时间格式
-     * @param string $str 需要检测的字符串
+     * @param  string  $str  需要检测的字符串
      * @return bool
      */
     public static function isTime($str)
@@ -967,12 +1030,13 @@ class Base
                 return false;
             }
         }
+
         return true;
     }
 
     /**
      * 检测 日期格式 或 时间格式
-     * @param string $str 需要检测的字符串
+     * @param  string  $str  需要检测的字符串
      * @return bool
      */
     public static function isDateOrTime($str)
@@ -982,7 +1046,7 @@ class Base
 
     /**
      * 检测手机号码格式
-     * @param string $str 需要检测的字符串
+     * @param  string  $str  需要检测的字符串
      * @return bool
      */
     public static function isMobile($str)
@@ -1033,27 +1097,27 @@ class Base
         $regx = "/(^\d{15}$)|(^\d{17}([0-9]|X)$)/";
         $arr_split = array();
         if (!preg_match($regx, $id)) {
-            return FALSE;
+            return false;
         }
         if (15 == strlen($id)) {
             //检查15位
             $regx = "/^(\d{6})+(\d{2})+(\d{2})+(\d{2})+(\d{3})$/";
             @preg_match($regx, $id, $arr_split);
             //检查生日日期是否正确
-            $dtm_birth = "19" . $arr_split[2] . '/' . $arr_split[3] . '/' . $arr_split[4];
+            $dtm_birth = "19".$arr_split[2].'/'.$arr_split[3].'/'.$arr_split[4];
             if (!strtotime($dtm_birth)) {
-                return FALSE;
+                return false;
             } else {
-                return TRUE;
+                return true;
             }
         } else {
             //检查18位
             $regx = "/^(\d{6})+(\d{4})+(\d{2})+(\d{2})+(\d{3})([0-9]|X)$/";
             @preg_match($regx, $id, $arr_split);
-            $dtm_birth = $arr_split[2] . '/' . $arr_split[3] . '/' . $arr_split[4];
+            $dtm_birth = $arr_split[2].'/'.$arr_split[3].'/'.$arr_split[4];
             //检查生日日期是否正确
             if (!strtotime($dtm_birth)) {
-                return FALSE;
+                return false;
             } else {
                 //检验18位身份证的校验码是否正确。
                 //校验位按照ISO 7064:1983.MOD 11-2的规定生成，X可以认为是数字10。
@@ -1061,16 +1125,16 @@ class Base
                 $arr_ch = array('1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2');
                 $sign = 0;
                 for ($i = 0; $i < 17; $i++) {
-                    $b = (int)$id[$i];
+                    $b = (int) $id[$i];
                     $w = $arr_int[$i];
                     $sign += $b * $w;
                 }
                 $n = $sign % 11;
                 $val_num = $arr_ch[$n];
                 if ($val_num != substr($id, 17, 1)) {
-                    return FALSE;
+                    return false;
                 } else {
-                    return TRUE;
+                    return true;
                 }
             }
         }
@@ -1080,10 +1144,10 @@ class Base
      * 阵列数组
      * @param $keys
      * @param $src
-     * @param bool $default
+     * @param  bool  $default
      * @return array
      */
-    public static function arrayElements($keys, $src, $default = FALSE)
+    public static function arrayElements($keys, $src, $default = false)
     {
         $return = [];
         if (!is_array($keys)) {
@@ -1096,13 +1160,14 @@ class Base
                 $return[$key] = $default;
             }
         }
+
         return $return;
     }
 
     /**
      * 判断字符串存在(包含)
-     * @param string $string
-     * @param string $find
+     * @param  string  $string
+     * @param  string  $find
      * @return bool
      */
     public static function strExists($string, $find)
@@ -1110,14 +1175,15 @@ class Base
         if (!is_string($string) || !is_string($find)) {
             return false;
         }
+
         return str_contains($string, $find);
     }
 
     /**
      * 判断字符串开头包含
-     * @param string $string //原字符串
-     * @param string $find //判断字符串
-     * @param bool|false $lower //是否不区分大小写
+     * @param  string  $string  //原字符串
+     * @param  string  $find  //判断字符串
+     * @param  bool|false  $lower  //是否不区分大小写
      * @return bool
      */
     public static function leftExists($string, $find, $lower = false)
@@ -1129,14 +1195,15 @@ class Base
             $string = strtolower($string);
             $find = strtolower($find);
         }
+
         return str_starts_with($string, $find);
     }
 
     /**
      * 判断字符串结尾包含
-     * @param string $string //原字符串
-     * @param string $find //判断字符串
-     * @param bool|false $lower //是否不区分大小写
+     * @param  string  $string  //原字符串
+     * @param  string  $find  //判断字符串
+     * @param  bool|false  $lower  //是否不区分大小写
      * @return int
      */
     public static function rightExists($string, $find, $lower = false)
@@ -1148,6 +1215,7 @@ class Base
             $string = strtolower($string);
             $find = strtolower($find);
         }
+
         return str_ends_with($string, $find);
     }
 
@@ -1155,7 +1223,7 @@ class Base
      * 删除开头指定字符串
      * @param $string
      * @param $find
-     * @param bool $lower
+     * @param  bool  $lower
      * @return string
      */
     public static function leftDelete($string, $find, $lower = false)
@@ -1163,6 +1231,7 @@ class Base
         if (Base::leftExists($string, $find, $lower)) {
             $string = substr($string, strlen($find));
         }
+
         return $string ?: '';
     }
 
@@ -1170,7 +1239,7 @@ class Base
      * 删除结尾指定字符串
      * @param $string
      * @param $find
-     * @param bool $lower
+     * @param  bool  $lower
      * @return string
      */
     public static function rightDelete($string, $find, $lower = false)
@@ -1178,14 +1247,15 @@ class Base
         if (Base::rightExists($string, $find, $lower)) {
             $string = substr($string, 0, strlen($find) * -1);
         }
+
         return $string;
     }
 
     /**
      * 截取指定字符串
      * @param $str
-     * @param string $ta
-     * @param string $tb
+     * @param  string  $ta
+     * @param  string  $tb
      * @return string
      */
     public static function getMiddle($str, $ta = '', $tb = '')
@@ -1196,6 +1266,7 @@ class Base
         if ($tb && str_contains($str, $tb)) {
             $str = substr($str, 0, strpos($str, $tb));
         }
+
         return $str;
     }
 
@@ -1204,26 +1275,27 @@ class Base
      * @param $search
      * @param $replace
      * @param $subject
-     * @param int $limit
+     * @param  int  $limit
      * @return string|string[]|null
      */
     public static function strReplaceLimit($search, $replace, $subject, $limit = -1)
     {
         if (is_array($search)) {
             foreach ($search as $k => $v) {
-                $search[$k] = '`' . preg_quote($v, '`') . '`';
+                $search[$k] = '`'.preg_quote($v, '`').'`';
             }
         } else {
-            $search = '`' . preg_quote($search, '`') . '`';
+            $search = '`'.preg_quote($search, '`').'`';
         }
+
         return preg_replace($search, $replace, $subject, $limit);
     }
 
     /**
      * 获取或设置
-     * @param $setname          // 配置名称
-     * @param bool $array       // 保存内容
-     * @param false $isUpdate   // 保存内容为更新模式，默认否
+     * @param $setname  // 配置名称
+     * @param  bool  $array  // 保存内容
+     * @param  false  $isUpdate  // 保存内容为更新模式，默认否
      * @return array
      */
     public static function setting($setname, $array = false, $isUpdate = false)
@@ -1232,8 +1304,8 @@ class Base
         if (empty($setname)) {
             return [];
         }
-        if ($array === false && isset($_A["__static_setting_" . $setname])) {
-            return $_A["__static_setting_" . $setname];
+        if ($array === false && isset($_A["__static_setting_".$setname])) {
+            return $_A["__static_setting_".$setname];
         }
         $setting = [];
         $row = Setting::whereName($setname)->first();
@@ -1252,7 +1324,8 @@ class Base
             $row->updateInstance(['setting' => $setting]);
             $row->save();
         }
-        $_A["__static_setting_" . $setname] = $setting;
+        $_A["__static_setting_".$setname] = $setting;
+
         return $setting;
     }
 
@@ -1266,6 +1339,7 @@ class Base
     public static function settingFind($setname, $keyname, $defaultVal = '')
     {
         $array = Base::setting($setname);
+
         return $array[$keyname] ?? $defaultVal;
     }
 
@@ -1294,9 +1368,10 @@ class Base
                 $time = ($time % 60);
             }
             $value["seconds"] = floor($time);
-            return (array)$value;
+
+            return (array) $value;
         } else {
-            return (bool)FALSE;
+            return (bool) false;
         }
     }
 
@@ -1312,6 +1387,7 @@ class Base
         $time += intval($value["hours"] * 3600);
         $time += intval($value["days"] * 86400);
         $time += intval($value["years"] * 31536000);
+
         return $time;
     }
 
@@ -1328,6 +1404,7 @@ class Base
         for ($i = 0; $i < count($arr); $i++) {
             $txt .= $china[$arr[$i]];
         }
+
         return $txt;
     }
 
@@ -1343,19 +1420,20 @@ class Base
 
     /**
      * 获取(时间戳转)今天是星期几，只返回（几）
-     * @param string|number $unixTime
+     * @param  string|number  $unixTime
      * @return string
      */
     public static function getTimeWeek($unixTime = '')
     {
         $unixTime = is_numeric($unixTime) ? $unixTime : time();
         $weekarray = ['日', '一', '二', '三', '四', '五', '六'];
+
         return $weekarray[date('w', $unixTime)];
     }
 
     /**
      * 获取(时间戳转)现在时间段：深夜、凌晨、早晨、上午.....
-     * @param string|number $unixTime
+     * @param  string|number  $unixTime
      * @return string
      */
     public static function getTimeDayeSegment($unixTime = '')
@@ -1406,12 +1484,13 @@ class Base
                 $val = self::strReplaceLimit('%', $item, $val, 1);
             }
         }
+
         return $val;
     }
 
     /**
      * 加载语言数据
-     * @param bool $refresh
+     * @param  bool  $refresh
      * @return array
      */
     public static function langData($refresh = false)
@@ -1420,7 +1499,7 @@ class Base
         if (!isset($_A["__static_langdata"]) || $refresh === true) {
             $_A["__static_langdata"] = [];
             $language = trim(Request::header('language'));
-            $langpath = resource_path('lang/' . $language . '/general.php');
+            $langpath = resource_path('lang/'.$language.'/general.php');
             if (file_exists($langpath)) {
                 $data = include $langpath;
                 if (is_array($data)) {
@@ -1428,6 +1507,7 @@ class Base
                 }
             }
         }
+
         return $_A["__static_langdata"];
     }
 
@@ -1443,7 +1523,7 @@ class Base
         $json = json_encode($param);
         $callback = $_GPC['callback'];
         if ($callback) {
-            return $callback . '(' . $json . ')';
+            return $callback.'('.$json.')';
         } else {
             return $json;
         }
@@ -1452,8 +1532,8 @@ class Base
     /**
      * 数组返回 正确
      * @param $msg
-     * @param string|array $data
-     * @param int $ret
+     * @param  string|array  $data
+     * @param  int  $ret
      * @return array
      */
     public static function retSuccess($msg, $data = [], $ret = 1)
@@ -1461,15 +1541,15 @@ class Base
         return array(
             'ret' => $ret,
             'msg' => self::Lang($msg),
-            'data' => $data
+            'data' => $data,
         );
     }
 
     /**
      * 数组返回 错误
      * @param $msg
-     * @param array $data
-     * @param int $ret
+     * @param  array  $data
+     * @param  int  $ret
      * @return array
      */
     public static function retError($msg, $data = [], $ret = 0)
@@ -1477,16 +1557,16 @@ class Base
         return array(
             'ret' => $ret,
             'msg' => self::Lang($msg),
-            'data' => $data
+            'data' => $data,
         );
     }
 
     /**
      * Ajax 错误返回
      * @param $msg
-     * @param array $data
-     * @param int $ret
-     * @param int $abortCode
+     * @param  array  $data
+     * @param  int  $ret
+     * @param  int  $abortCode
      * @return array
      */
     public static function ajaxError($msg, $data = [], $ret = 0, $abortCode = 404)
@@ -1496,14 +1576,15 @@ class Base
         } else {
             abort($abortCode, $msg);
         }
+
         return [];
     }
 
     /**
      * JSON返回 正确
      * @param $msg
-     * @param array $data
-     * @param int $ret
+     * @param  array  $data
+     * @param  int  $ret
      * @return string
      */
     public static function jsonSuccess($msg, $data = [], $ret = 1)
@@ -1514,8 +1595,8 @@ class Base
     /**
      * JSON返回 错误
      * @param $msg
-     * @param array $data
-     * @param int $ret
+     * @param  array  $data
+     * @param  int  $ret
      * @return string
      */
     public static function jsonError($msg, $data = [], $ret = 0)
@@ -1546,7 +1627,7 @@ class Base
     /**
      * 获取数组的第几个值
      * @param $arr
-     * @param int $i
+     * @param  int  $i
      * @return array
      */
     public static function getArray($arr, $i = 1)
@@ -1560,6 +1641,7 @@ class Base
             }
             $j++;
         }
+
         return $array;
     }
 
@@ -1574,9 +1656,11 @@ class Base
         if ($hour > 24) {
             $day = floor($hour / 24);
             $hour -= $day * 24;
-            return $day . '天' . $hour . '小时';
+
+            return $day.'天'.$hour.'小时';
         }
-        return $hour . '小时';
+
+        return $hour.'小时';
     }
 
     /**
@@ -1590,11 +1674,11 @@ class Base
         if ($date > strtotime(date("Y-m-d"))) {
             //今天
             if ($dur < 60) {
-                return max($dur, 1) . '秒前';
+                return max($dur, 1).'秒前';
             } elseif ($dur < 3600) {
-                return floor($dur / 60) . '分钟前';
+                return floor($dur / 60).'分钟前';
             } elseif ($dur < 86400) {
-                return floor($dur / 3600) . '小时前';
+                return floor($dur / 3600).'小时前';
             } else {
                 return date("H:i", $date);
             }
@@ -1606,8 +1690,9 @@ class Base
             return '前天';
         } elseif ($dur > 86400) {
             //x天前
-            return floor($dur / 86400) . '天前';
+            return floor($dur / 86400).'天前';
         }
+
         return date("Y-m-d", $date);
     }
 
@@ -1643,10 +1728,11 @@ class Base
             $prevfix = substr($str, 0, strlen($email_array[0]) < 4 ? 1 : 3); //邮箱前缀
             $count = 0;
             $str = preg_replace('/([\d\w+_-]{0,100})@/', '***@', $str, -1, $count);
-            return $prevfix . $str;
+
+            return $prevfix.$str;
         }
         if (Base::isMobile($str)) {
-            return substr($str, 0, 3) . "****" . substr($str, -4);
+            return substr($str, 0, 3)."****".substr($str, -4);
         }
         $pattern = '/([\d]{4})([\d]{4})([\d]{4})([\d]{4})([\d]*)?/i';
         if (preg_match($pattern, $str)) {
@@ -1660,18 +1746,21 @@ class Base
         if (preg_match($pattern, $str)) {
             return preg_replace($pattern, '$1 **** $3', $str);
         }
-        return substr($str, 0, 3) . "***" . substr($str, -1);
+
+        return substr($str, 0, 3)."***".substr($str, -1);
     }
 
     /**
      * 数字每4位加一空格
      * @param $str
-     * @param string $interval
+     * @param  string  $interval
      * @return string
      */
     public static function fourFormat($str, $interval = " ")
     {
-        if (!is_numeric($str)) return $str;
+        if (!is_numeric($str)) {
+            return $str;
+        }
         //
         $text = '';
         for ($i = 0; $i < strlen($str); $i++) {
@@ -1680,13 +1769,14 @@ class Base
                 $text .= $interval;
             }
         }
+
         return $text;
     }
 
     /**
      * 保留两位小数点
      * @param $str
-     * @param bool $float
+     * @param  bool  $float
      * @return float
      */
     public static function twoFloat($str, $float = false)
@@ -1695,12 +1785,13 @@ class Base
         if ($float === true) {
             $str = floatval($str);
         }
+
         return $str;
     }
 
     /**
      * 获取时间戳
-     * @param bool $refresh
+     * @param  bool  $refresh
      * @return int
      */
     public static function time($refresh = false)
@@ -1709,6 +1800,7 @@ class Base
         if (!isset($_A["__static_time"]) || $refresh === true) {
             $_A["__static_time"] = time();
         }
+
         return $_A["__static_time"];
     }
 
@@ -1719,14 +1811,15 @@ class Base
     public static function msecTime()
     {
         list($msec, $sec) = explode(' ', microtime());
-        $time = explode(".", $sec . ($msec * 1000));
+        $time = explode(".", $sec.($msec * 1000));
+
         return $time[0];
     }
 
     /**
      * 时间差(不够1个小时算一个小时)
-     * @param int $s 开始时间戳
-     * @param int $e 结束时间戳
+     * @param  int  $s  开始时间戳
+     * @param  int  $e  结束时间戳
      * @return string
      */
     public static function timeDiff($s, $e)
@@ -1734,43 +1827,45 @@ class Base
         $time = $e - $s;
         $days = 0;
         if ($time >= 86400) { // 如果大于1天
-            $days = (int)($time / 86400);
+            $days = (int) ($time / 86400);
             $time = $time % 86400; // 计算天后剩余的毫秒数
         }
         $hours = 0;
         if ($time >= 3600) { // 如果大于1小时
-            $hours = (int)($time / 3600);
+            $hours = (int) ($time / 3600);
             $time = $time % 3600; // 计算小时后剩余的毫秒数
         }
         $minutes = ceil($time / 60); // 剩下的毫秒数都算作分
-        $daysStr = $days > 0 ? $days . '天' : '';
-        $hoursStr = ($hours > 0 || ($days > 0 && $minutes > 0)) ? $hours . '时' : '';
-        $minuteStr = ($minutes > 0) ? $minutes . '分' : '';
-        return $daysStr . $hoursStr . $minuteStr;
+        $daysStr = $days > 0 ? $days.'天' : '';
+        $hoursStr = ($hours > 0 || ($days > 0 && $minutes > 0)) ? $hours.'时' : '';
+        $minuteStr = ($minutes > 0) ? $minutes.'分' : '';
+
+        return $daysStr.$hoursStr.$minuteStr;
     }
 
     /**
      * 时间秒数格式化
-     * @param int $time 时间秒数
+     * @param  int  $time  时间秒数
      * @return string
      */
     public static function timeFormat($time)
     {
         $days = 0;
         if ($time >= 86400) { // 如果大于1天
-            $days = (int)($time / 86400);
+            $days = (int) ($time / 86400);
             $time = $time % 86400; // 计算天后剩余的毫秒数
         }
         $hours = 0;
         if ($time >= 3600) { // 如果大于1小时
-            $hours = (int)($time / 3600);
+            $hours = (int) ($time / 3600);
             $time = $time % 3600; // 计算小时后剩余的毫秒数
         }
         $minutes = ceil($time / 60); // 剩下的毫秒数都算作分
-        $daysStr = $days > 0 ? $days . '天' : '';
-        $hoursStr = ($hours > 0 || ($days > 0 && $minutes > 0)) ? $hours . '时' : '';
-        $minuteStr = ($minutes > 0) ? $minutes . '分' : '';
-        return $daysStr . $hoursStr . $minuteStr;
+        $daysStr = $days > 0 ? $days.'天' : '';
+        $hoursStr = ($hours > 0 || ($days > 0 && $minutes > 0)) ? $hours.'时' : '';
+        $minuteStr = ($minutes > 0) ? $minutes.'分' : '';
+
+        return $daysStr.$hoursStr.$minuteStr;
     }
 
     /**
@@ -1798,15 +1893,18 @@ class Base
         if (!isset($_A["__static_ip"])) {
             if (getenv('HTTP_CLIENT_IP') and strcasecmp(getenv('HTTP_CLIENT_IP'), 'unknown')) {
                 $onlineip = getenv('HTTP_CLIENT_IP');
-            } elseif (isset($_SERVER['HTTP_CLIENT_IP']) and $_SERVER['HTTP_CLIENT_IP'] and strcasecmp($_SERVER['HTTP_CLIENT_IP'], 'unknown')) {
+            } elseif (isset($_SERVER['HTTP_CLIENT_IP']) and $_SERVER['HTTP_CLIENT_IP'] and strcasecmp($_SERVER['HTTP_CLIENT_IP'],
+                    'unknown')) {
                 $onlineip = $_SERVER['HTTP_CLIENT_IP'];
             } elseif (getenv('HTTP_X_FORWARDED_FOR') and strcasecmp(getenv('HTTP_X_FORWARDED_FOR'), 'unknown')) {
                 $onlineip = getenv('HTTP_X_FORWARDED_FOR');
-            } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR']) and $_SERVER['HTTP_X_FORWARDED_FOR'] and strcasecmp($_SERVER['HTTP_X_FORWARDED_FOR'], 'unknown')) {
+            } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR']) and $_SERVER['HTTP_X_FORWARDED_FOR'] and strcasecmp($_SERVER['HTTP_X_FORWARDED_FOR'],
+                    'unknown')) {
                 $onlineip = $_SERVER['HTTP_X_FORWARDED_FOR'];
             } elseif (getenv('REMOTE_ADDR') and strcasecmp(getenv('REMOTE_ADDR'), 'unknown')) {
                 $onlineip = getenv('REMOTE_ADDR');
-            } elseif (isset($_SERVER['REMOTE_ADDR']) and $_SERVER['REMOTE_ADDR'] and strcasecmp($_SERVER['REMOTE_ADDR'], 'unknown')) {
+            } elseif (isset($_SERVER['REMOTE_ADDR']) and $_SERVER['REMOTE_ADDR'] and strcasecmp($_SERVER['REMOTE_ADDR'],
+                    'unknown')) {
                 $onlineip = $_SERVER['REMOTE_ADDR'];
             } elseif (Request::header('X-Real-IP')) {
                 $onlineip = Request::header('X-Real-IP');
@@ -1816,12 +1914,13 @@ class Base
             preg_match("/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/", $onlineip, $match);
             $_A["__static_ip"] = $match[0] ?: 'unknown';
         }
+
         return $_A["__static_ip"];
     }
 
     /**
      * 获取IP地址经纬度
-     * @param string $ip
+     * @param  string  $ip
      * @return array|mixed
      */
     public static function getIpGcj02($ip = '')
@@ -1829,18 +1928,20 @@ class Base
         if (empty($ip)) {
             $ip = self::getIp();
         }
-        $cacheKey = "getIpPoint::" . md5($ip);
+        $cacheKey = "getIpPoint::".md5($ip);
         $result = Cache::rememberForever($cacheKey, function () use ($ip) {
-            return Ihttp::ihttp_request("https://www.ifreesite.com/ipaddress/address.php?q=" . $ip, [], [], 12);
+            return Ihttp::ihttp_request("https://www.ifreesite.com/ipaddress/address.php?q=".$ip, [], [], 12);
         });
         if (Base::isError($result)) {
             Cache::forget($cacheKey);
+
             return $result;
         }
         $data = $result['data'];
         $lastPos = strrpos($data, ',');
         $long = floatval(Base::getMiddle(substr($data, $lastPos + 1), null, ')'));
         $lat = floatval(Base::getMiddle(substr($data, strrpos(substr($data, 0, $lastPos), ',') + 1), null, ','));
+
         return Base::retSuccess("success", [
             'long' => $long,
             'lat' => $lat,
@@ -1849,7 +1950,7 @@ class Base
 
     /**
      * 百度接口：根据ip获取经纬度
-     * @param string $ip
+     * @param  string  $ip
      * @return array|mixed
      */
     public static function getIpGcj02ByBaidu($ip = ''): array
@@ -1858,15 +1959,17 @@ class Base
             $ip = self::getIp();
         }
 
-        $cacheKey = "getIpPoint::" . md5($ip);
+        $cacheKey = "getIpPoint::".md5($ip);
         $result = Cache::rememberForever($cacheKey, function () use ($ip) {
             $ak = Config::get('app.baidu_app_key');
-            $url = 'http://api.map.baidu.com/location/ip?ak=' . $ak . '&ip=' . $ip . '&coor=bd09ll';
+            $url = 'http://api.map.baidu.com/location/ip?ak='.$ak.'&ip='.$ip.'&coor=bd09ll';
+
             return Ihttp::ihttp_request($url, [], [], 12);
         });
 
         if (Base::isError($result)) {
             Cache::forget($cacheKey);
+
             return $result;
         }
         $data = json_decode($result['data'], true);
@@ -1874,6 +1977,7 @@ class Base
         // x坐标纬度, y坐标经度
         $long = Arr::get($data, 'content.point.x');
         $lat = Arr::get($data, 'content.point.y');
+
         return Base::retSuccess("success", [
             'long' => $long,
             'lat' => $lat,
@@ -1882,7 +1986,7 @@ class Base
 
     /**
      * 获取IP地址详情
-     * @param string $ip
+     * @param  string  $ip
      * @return array|mixed
      */
     public static function getIpInfo($ip = '')
@@ -1890,17 +1994,20 @@ class Base
         if (empty($ip)) {
             $ip = self::getIp();
         }
-        $cacheKey = "getIpInfo::" . md5($ip);
+        $cacheKey = "getIpInfo::".md5($ip);
         $result = Cache::rememberForever($cacheKey, function () use ($ip) {
-            return Ihttp::ihttp_request("http://ip.taobao.com/service/getIpInfo.php?accessKey=alibaba-inc&ip=" . $ip, [], [], 12);
+            return Ihttp::ihttp_request("http://ip.taobao.com/service/getIpInfo.php?accessKey=alibaba-inc&ip=".$ip, [],
+                [], 12);
         });
         if (Base::isError($result)) {
             Cache::forget($cacheKey);
+
             return $result;
         }
         $data = json_decode($result['data'], true);
         if (!is_array($data) || intval($data['code']) != 0) {
             Cache::forget($cacheKey);
+
             return Base::retError("error ip: -1");
         }
         $data = $data['data'];
@@ -1910,23 +2017,24 @@ class Base
         $data['text'] = $data['country'];
         $data['textSmall'] = $data['country'];
         if ($data['region'] && $data['region'] != $data['country'] && $data['region'] != "XX") {
-            $data['text'] .= " " . $data['region'];
+            $data['text'] .= " ".$data['region'];
             $data['textSmall'] = $data['region'];
         }
         if ($data['city'] && $data['city'] != $data['region'] && $data['city'] != "XX") {
-            $data['text'] .= " " . $data['city'];
-            $data['textSmall'] .= " " . $data['city'];
+            $data['text'] .= " ".$data['city'];
+            $data['textSmall'] .= " ".$data['city'];
         }
         if ($data['county'] && $data['county'] != $data['city'] && $data['county'] != "XX") {
-            $data['text'] .= " " . $data['county'];
-            $data['textSmall'] .= " " . $data['county'];
+            $data['text'] .= " ".$data['county'];
+            $data['textSmall'] .= " ".$data['county'];
         }
+
         return Base::retSuccess("success", $data);
     }
 
     /**
      * 是否是中国IP：-1错误、1是、0否
-     * @param string $ip
+     * @param  string  $ip
      * @return int
      */
     public static function isCnIp($ip = '')
@@ -1934,10 +2042,10 @@ class Base
         if (empty($ip)) {
             $ip = self::getIp();
         }
-        $cacheKey = "isCnIp::" . md5($ip);
+        $cacheKey = "isCnIp::".md5($ip);
         //
         $result = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($ip) {
-            $file = dirname(__FILE__) . '/IpAddr/all_cn.txt';
+            $file = dirname(__FILE__).'/IpAddr/all_cn.txt';
             if (!file_exists($file)) {
                 return -1;
             }
@@ -1953,11 +2061,13 @@ class Base
                 }
             }
             fclose($myFile);
+
             return $in ? 1 : 0;
         });
         if ($result === -1) {
             Cache::forget($cacheKey);
         }
+
         //
         return intval($result);
     }
@@ -1982,6 +2092,7 @@ class Base
             if (str_contains($netmask, '.')) {
                 $netmask = str_replace('*', '0', $netmask);
                 $netmask_dec = ip2long($netmask);
+
                 return ((ip2long($ip) & $netmask_dec) == (ip2long($range) & $netmask_dec));
             } else {
                 $x = explode('.', $range);
@@ -1989,11 +2100,13 @@ class Base
                     $x[] = '0';
                 }
                 list($a, $b, $c, $d) = $x;
-                $range = sprintf("%u.%u.%u.%u", empty($a) ? '0' : $a, empty($b) ? '0' : $b, empty($c) ? '0' : $c, empty($d) ? '0' : $d);
+                $range = sprintf("%u.%u.%u.%u", empty($a) ? '0' : $a, empty($b) ? '0' : $b, empty($c) ? '0' : $c,
+                    empty($d) ? '0' : $d);
                 $range_dec = ip2long($range);
                 $ip_dec = ip2long($ip);
                 $wildcard_dec = pow(2, (32 - $netmask)) - 1;
                 $netmask_dec = ~$wildcard_dec;
+
                 return (($ip_dec & $netmask_dec) == ($range_dec & $netmask_dec));
             }
         } else {
@@ -2004,11 +2117,13 @@ class Base
             }
             if (str_contains($range, '-')) {
                 list($lower, $upper) = explode('-', $range, 2);
-                $lower_dec = (float)sprintf("%u", ip2long($lower));
-                $upper_dec = (float)sprintf("%u", ip2long($upper));
-                $ip_dec = (float)sprintf("%u", ip2long($ip));
+                $lower_dec = (float) sprintf("%u", ip2long($lower));
+                $upper_dec = (float) sprintf("%u", ip2long($upper));
+                $ip_dec = (float) sprintf("%u", ip2long($ip));
+
                 return (($ip_dec >= $lower_dec) && ($ip_dec <= $upper_dec));
             }
+
             return false;
         }
     }
@@ -2024,13 +2139,14 @@ class Base
         if ($key) {
             $input = $input[$key] ?? array();
         }
+
         return is_array($input) ? $input : array($input);
     }
 
     /**
      * php://input 字符串解析到变量并获取指定值
      * @param $key
-     * @param null $default
+     * @param  null  $default
      * @return mixed|null
      */
     public static function getContentValue($key, $default = null)
@@ -2040,12 +2156,13 @@ class Base
             parse_str(Request::getContent(), $input);
             $_A["__static_input_content"] = $input;
         }
+
         return $_A["__static_input_content"][$key] ?? $default;
     }
 
     /**
      * @param $key
-     * @param null $default
+     * @param  null  $default
      * @return array|mixed|string|null
      */
     public static function getPostValue($key, $default = null)
@@ -2054,12 +2171,13 @@ class Base
         if (!isset($value)) {
             $value = Request::post($key, $default);
         }
+
         return $value;
     }
 
     /**
      * @param $key
-     * @param null $default
+     * @param  null  $default
      * @return int
      */
     public static function getPostInt($key, $default = null)
@@ -2070,8 +2188,8 @@ class Base
     /**
      * 多维 array_values
      * @param $array
-     * @param string $keyName
-     * @param string $valName
+     * @param  string  $keyName
+     * @param  string  $valName
      * @return array
      */
     public static function array_values_recursive($array, $keyName = 'key', $valName = 'item')
@@ -2094,8 +2212,10 @@ class Base
                     $valName => $continue ? self::array_values_recursive($value, $keyName, $valName) : $value,
                 ];
             }
+
             return $temp;
         }
+
         return $array;
     }
 
@@ -2109,6 +2229,7 @@ class Base
         if (!isset($_A["__static_token"])) {
             $_A["__static_token"] = Base::nullShow(Request::header('token'), Request::input('token'));
         }
+
         return $_A["__static_token"];
     }
 
@@ -2151,17 +2272,18 @@ class Base
      * 返回根据距离sql排序语句
      * @param $lat
      * @param $lng
-     * @param string $latName
-     * @param string $lngName
+     * @param  string  $latName
+     * @param  string  $lngName
      * @return string
      */
     public static function acos($lat, $lng, $latName = 'lat', $lngName = 'lng')
     {
         $lat = floatval($lat);
         $lng = floatval($lng);
+
         return 'ACOS(
-		SIN((' . $lat . ' * 3.1415) / 180) * SIN((' . $latName . ' * 3.1415) / 180) + COS((' . $lat . ' * 3.1415) / 180) * COS((' . $latName . ' * 3.1415) / 180) * COS(
-			(' . $lng . ' * 3.1415) / 180 - (' . $lngName . ' * 3.1415) / 180
+		SIN(('.$lat.' * 3.1415) / 180) * SIN(('.$latName.' * 3.1415) / 180) + COS(('.$lat.' * 3.1415) / 180) * COS(('.$latName.' * 3.1415) / 180) * COS(
+			('.$lng.' * 3.1415) / 180 - ('.$lngName.' * 3.1415) / 180
 		)
 	) * 6380';
     }
@@ -2170,7 +2292,7 @@ class Base
      * 获取每页数量
      * @param $max
      * @param $default
-     * @param string $inputName
+     * @param  string  $inputName
      * @return mixed
      */
     public static function getPaginate($max, $default, $inputName = 'pagesize')
@@ -2180,7 +2302,7 @@ class Base
 
     /**
      * image64图片保存
-     * @param array $param [ image64=带前缀的base64, path=>文件路径, fileName=>文件名称, scale=>[压缩原图宽,高, 压缩方式] ]
+     * @param  array  $param  [ image64=带前缀的base64, path=>文件路径, fileName=>文件名称, scale=>[压缩原图宽,高, 压缩方式] ]
      * @return array [name=>文件名, size=>文件大小(单位KB),file=>绝对地址, path=>相对地址, url=>全路径地址, ext=>文件后缀名]
      */
     public static function image64save($param)
@@ -2204,21 +2326,21 @@ class Base
                         }
                     }
                 }
-                $fileName = 'paste_' . md5($imgBase64) . '.' . $extension;
-                $scaleName = md5_file($imgBase64) . $scaleName . '.' . $extension;
+                $fileName = 'paste_'.md5($imgBase64).'.'.$extension;
+                $scaleName = md5_file($imgBase64).$scaleName.'.'.$extension;
             }
             $fileDir = $param['path'];
             $filePath = public_path($fileDir);
             Base::makeDir($filePath);
-            if (file_put_contents($filePath . $fileName, base64_decode(str_replace($res[1], '', $imgBase64)))) {
-                $fileSize = filesize($filePath . $fileName);
+            if (file_put_contents($filePath.$fileName, base64_decode(str_replace($res[1], '', $imgBase64)))) {
+                $fileSize = filesize($filePath.$fileName);
                 $array = [
                     "name" => $fileName,                                                //原文件名
                     "size" => Base::twoFloat($fileSize / 1024, true),         //大小KB
-                    "file" => $filePath . $fileName,                                    //文件的完整路径                "D:\www....KzZ.jpg"
-                    "path" => $fileDir . $fileName,                                     //相对路径                     "uploads/pic....KzZ.jpg"
-                    "url" => Base::fillUrl($fileDir . $fileName),                   //完整的URL                    "https://.....hhsKzZ.jpg"
-                    "thumb" => '',                                                      //缩略图（预览图）               "https://.....hhsKzZ.jpg_thumb.jpg"
+                    "file" => $filePath.$fileName,//文件的完整路径                "D:\www....KzZ.jpg"
+                    "path" => $fileDir.$fileName,//相对路径                     "uploads/pic....KzZ.jpg"
+                    "url" => Base::fillUrl($fileDir.$fileName),//完整的URL                    "https://.....hhsKzZ.jpg"
+                    "thumb" => '',//缩略图（预览图）               "https://.....hhsKzZ.jpg_thumb.jpg"
                     "width" => -1,                                                      //图片宽度
                     "height" => -1,                                                     //图片高度
                     "ext" => $extension,                                                //文件后缀名
@@ -2234,7 +2356,7 @@ class Base
                         $cut = ($width > 0 && $height > 0) ? 1 : -1;
                         $cut = $param['scale'][2] ?? $cut;
                         //图片压缩
-                        $tmpFile = $array['file'] . '_tmp.jpg';
+                        $tmpFile = $array['file'].'_tmp.jpg';
                         if (Base::imgThumb($array['file'], $tmpFile, $width, $height, $cut)) {
                             $tmpSize = filesize($tmpFile);
                             if ($tmpSize > $fileSize) {
@@ -2250,30 +2372,33 @@ class Base
                         $array['height'] = $paramet[1];
                         //重命名
                         if ($scaleName) {
-                            $scaleName = str_replace(['{WIDTH}', '{HEIGHT}'], [$array['width'], $array['height']], $scaleName);
-                            if (rename($array['file'], Base::rightDelete($array['file'], $fileName) . $scaleName)) {
-                                $array['file'] = Base::rightDelete($array['file'], $fileName) . $scaleName;
-                                $array['path'] = Base::rightDelete($array['path'], $fileName) . $scaleName;
-                                $array['url'] = Base::rightDelete($array['url'], $fileName) . $scaleName;
+                            $scaleName = str_replace(['{WIDTH}', '{HEIGHT}'], [$array['width'], $array['height']],
+                                $scaleName);
+                            if (rename($array['file'], Base::rightDelete($array['file'], $fileName).$scaleName)) {
+                                $array['file'] = Base::rightDelete($array['file'], $fileName).$scaleName;
+                                $array['path'] = Base::rightDelete($array['path'], $fileName).$scaleName;
+                                $array['url'] = Base::rightDelete($array['url'], $fileName).$scaleName;
                             }
                         }
                     }
                 }
                 //生成缩略图
                 $array['thumb'] = $array['path'];
-                if (Base::imgThumb($array['file'], $array['file'] . "_thumb.jpg", 180, 0)) {
+                if (Base::imgThumb($array['file'], $array['file']."_thumb.jpg", 180, 0)) {
                     $array['thumb'] .= "_thumb.jpg";
                 }
                 $array['thumb'] = Base::fillUrl($array['thumb']);
+
                 return Base::retSuccess('success', $array);
             }
         }
+
         return Base::retError('图片保存失败');
     }
 
     /**
      * 上传文件
-     * @param array $param [ type=[文件类型], file=>Request::file, path=>文件路径, fileName=>文件名称, scale=>[压缩原图宽,高, 压缩方式], size=>限制大小KB, autoThumb=>false不要自动生成缩略图 ]
+     * @param  array  $param  [ type=[文件类型], file=>Request::file, path=>文件路径, fileName=>文件名称, scale=>[压缩原图宽,高, 压缩方式], size=>限制大小KB, autoThumb=>false不要自动生成缩略图 ]
      * @return array [name=>原文件名, size=>文件大小(单位KB),file=>绝对地址, path=>相对地址, url=>全路径地址, ext=>文件后缀名]
      */
     public static function upload($param)
@@ -2311,7 +2436,11 @@ class Base
                     $type = ['zip'];
                     break;
                 case 'file':
-                    $type = ['jpg', 'jpeg', 'png', 'gif', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'esp', 'pdf', 'rar', 'zip', 'gz', 'ai', 'avi', 'bmp', 'cdr', 'eps', 'mov', 'mp3', 'mp4', 'pr', 'psd', 'svg', 'tif'];
+                    $type = [
+                        'jpg', 'jpeg', 'png', 'gif', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'esp', 'pdf',
+                        'rar', 'zip', 'gz', 'ai', 'avi', 'bmp', 'cdr', 'eps', 'mov', 'mp3', 'mp4', 'pr', 'psd', 'svg',
+                        'tif',
+                    ];
                     break;
                 case 'firmware':
                     $type = ['img', 'tar', 'bin'];
@@ -2335,11 +2464,16 @@ class Base
                         'ofd',
                         'pdf',
                         'txt',
-                        'htaccess', 'htgroups', 'htpasswd', 'conf', 'bat', 'cmd', 'cpp', 'c', 'cc', 'cxx', 'h', 'hh', 'hpp', 'ino', 'cs', 'css',
-                        'dockerfile', 'go', 'golang', 'html', 'htm', 'xhtml', 'vue', 'we', 'wpy', 'java', 'js', 'jsm', 'jsx', 'json', 'jsp', 'less', 'lua', 'makefile', 'gnumakefile',
-                        'ocamlmakefile', 'make', 'mysql', 'nginx', 'ini', 'cfg', 'prefs', 'm', 'mm', 'pl', 'pm', 'p6', 'pl6', 'pm6', 'pgsql', 'php',
-                        'inc', 'phtml', 'shtml', 'php3', 'php4', 'php5', 'phps', 'phpt', 'aw', 'ctp', 'module', 'ps1', 'py', 'r', 'rb', 'ru', 'gemspec', 'rake', 'guardfile', 'rakefile',
-                        'gemfile', 'rs', 'sass', 'scss', 'sh', 'bash', 'bashrc', 'sql', 'sqlserver', 'swift', 'ts', 'typescript', 'str', 'vbs', 'vb', 'v', 'vh', 'sv', 'svh', 'xml',
+                        'htaccess', 'htgroups', 'htpasswd', 'conf', 'bat', 'cmd', 'cpp', 'c', 'cc', 'cxx', 'h', 'hh',
+                        'hpp', 'ino', 'cs', 'css',
+                        'dockerfile', 'go', 'golang', 'html', 'htm', 'xhtml', 'vue', 'we', 'wpy', 'java', 'js', 'jsm',
+                        'jsx', 'json', 'jsp', 'less', 'lua', 'makefile', 'gnumakefile',
+                        'ocamlmakefile', 'make', 'mysql', 'nginx', 'ini', 'cfg', 'prefs', 'm', 'mm', 'pl', 'pm', 'p6',
+                        'pl6', 'pm6', 'pgsql', 'php',
+                        'inc', 'phtml', 'shtml', 'php3', 'php4', 'php5', 'phps', 'phpt', 'aw', 'ctp', 'module', 'ps1',
+                        'py', 'r', 'rb', 'ru', 'gemspec', 'rake', 'guardfile', 'rakefile',
+                        'gemfile', 'rs', 'sass', 'scss', 'sh', 'bash', 'bashrc', 'sql', 'sqlserver', 'swift', 'ts',
+                        'typescript', 'str', 'vbs', 'vb', 'v', 'vh', 'sv', 'svh', 'xml',
                         'rdf', 'rss', 'wsdl', 'xslt', 'atom', 'mathml', 'mml', 'xul', 'xbl', 'xaml', 'yaml', 'yml',
                         'asp', 'properties', 'gitignore', 'log', 'bas', 'prg', 'python', 'ftl', 'aspx',
                         'mp3', 'wav', 'mp4', 'flv',
@@ -2353,12 +2487,12 @@ class Base
             }
             $extension = strtolower($file->getClientOriginalExtension());
             if ($type && !in_array($extension, $type)) {
-                return Base::retError('文件格式错误，限制类型：' . implode(",", $type));
+                return Base::retError('文件格式错误，限制类型：'.implode(",", $type));
             }
             try {
                 $fileSize = $file->getSize();
                 if ($param['size'] > 0 && $fileSize > $param['size'] * 1024) {
-                    return Base::retError('文件大小超限，最大限制：' . $param['size'] . 'KB');
+                    return Base::retError('文件大小超限，最大限制：'.$param['size'].'KB');
                 }
             } catch (Exception $e) {
                 $fileSize = 0;
@@ -2378,8 +2512,8 @@ class Base
                         }
                     }
                 }
-                $fileName = md5_file($file) . '.' . $extension;
-                $scaleName = md5_file($file) . $scaleName . '.' . $extension;
+                $fileName = md5_file($file).'.'.$extension;
+                $scaleName = md5_file($file).$scaleName.'.'.$extension;
             }
             //
             $file->move(public_path($param['path']), $fileName);
@@ -2387,10 +2521,10 @@ class Base
             $array = [
                 "name" => $file->getClientOriginalName(),               //原文件名
                 "size" => Base::twoFloat($fileSize / 1024, true),       //大小KB
-                "file" => public_path($param['path'] . $fileName),        //文件的完整路径                "D:\www....KzZ.jpg"
-                "path" => $param['path'] . $fileName,                     //相对路径                     "uploads/pic....KzZ.jpg"
-                "url" => Base::fillUrl($param['path'] . $fileName),       //完整的URL                    "https://.....hhsKzZ.jpg"
-                "thumb" => '',                                          //缩略图（预览图）               "https://.....hhsKzZ.jpg_thumb.jpg"
+                "file" => public_path($param['path'].$fileName),        //文件的完整路径                "D:\www....KzZ.jpg"
+                "path" => $param['path'].$fileName,//相对路径                     "uploads/pic....KzZ.jpg"
+                "url" => Base::fillUrl($param['path'].$fileName),//完整的URL                    "https://.....hhsKzZ.jpg"
+                "thumb" => '',//缩略图（预览图）               "https://.....hhsKzZ.jpg_thumb.jpg"
                 "width" => -1,                                          //图片宽度
                 "height" => -1,                                         //图片高度
                 "ext" => $extension,                                    //文件后缀名
@@ -2427,7 +2561,7 @@ class Base
                         $cut = ($width > 0 && $height > 0) ? 1 : -1;
                         $cut = $param['scale'][2] ?? $cut;
                         //图片压缩
-                        $tmpFile = $array['file'] . '_tmp.jpg';
+                        $tmpFile = $array['file'].'_tmp.jpg';
                         if (Base::imgThumb($array['file'], $tmpFile, $width, $height, $cut)) {
                             $tmpSize = filesize($tmpFile);
                             if ($tmpSize > $fileSize) {
@@ -2443,25 +2577,29 @@ class Base
                         $array['height'] = $paramet[1];
                         //重命名
                         if ($scaleName) {
-                            $scaleName = str_replace(['{WIDTH}', '{HEIGHT}'], [$array['width'], $array['height']], $scaleName);
-                            if (rename($array['file'], Base::rightDelete($array['file'], $fileName) . $scaleName)) {
-                                $array['file'] = Base::rightDelete($array['file'], $fileName) . $scaleName;
-                                $array['path'] = Base::rightDelete($array['path'], $fileName) . $scaleName;
-                                $array['url'] = Base::rightDelete($array['url'], $fileName) . $scaleName;
+                            $scaleName = str_replace(['{WIDTH}', '{HEIGHT}'], [$array['width'], $array['height']],
+                                $scaleName);
+                            if (rename($array['file'], Base::rightDelete($array['file'], $fileName).$scaleName)) {
+                                $array['file'] = Base::rightDelete($array['file'], $fileName).$scaleName;
+                                $array['path'] = Base::rightDelete($array['path'], $fileName).$scaleName;
+                                $array['url'] = Base::rightDelete($array['url'], $fileName).$scaleName;
                             }
                         }
                     }
                 }
                 //生成缩略图
                 $array['thumb'] = $array['path'];
-                if ($param['autoThumb'] === "false") $param['autoThumb'] = false;
+                if ($param['autoThumb'] === "false") {
+                    $param['autoThumb'] = false;
+                }
                 if ($param['autoThumb'] !== false) {
-                    if (Base::imgThumb($array['file'], $array['file'] . "_thumb.jpg", 320, 0)) {
+                    if (Base::imgThumb($array['file'], $array['file']."_thumb.jpg", 320, 0)) {
                         $array['thumb'] .= "_thumb.jpg";
                     }
                 }
                 $array['thumb'] = Base::fillUrl($array['thumb']);
             }
+
             //
             return Base::retSuccess('success', $array);
         } else {
@@ -2471,15 +2609,15 @@ class Base
 
     /**
      * 上传文件移动
-     * @param array $uploadResult
-     * @param string $newPath "/" 结尾
+     * @param  array  $uploadResult
+     * @param  string  $newPath  "/" 结尾
      * @return array
      */
     public static function uploadMove($uploadResult, $newPath)
     {
         if (str_ends_with($newPath, "/") && file_exists($uploadResult['file'])) {
             Base::makeDir(public_path($newPath));
-            $oldPath = dirname($uploadResult['path']) . "/";
+            $oldPath = dirname($uploadResult['path'])."/";
             $newFile = str_replace($oldPath, $newPath, $uploadResult['file']);
             if (rename($uploadResult['file'], $newFile)) {
                 $oldUrl = $uploadResult['url'];
@@ -2497,17 +2635,18 @@ class Base
                 }
             }
         }
+
         return $uploadResult;
     }
 
     /**
      * 生成缩略图
-     * @param string $src_img 源图绝对完整地址{带文件名及后缀名}
-     * @param string $dst_img 目标图绝对完整地址{带文件名及后缀名}
-     * @param int $width 缩略图宽{0:此时目标高度不能为0，目标宽度为源图宽*(目标高度/源图高)}
-     * @param int $height 缩略图高{0:此时目标宽度不能为0，目标高度为源图高*(目标宽度/源图宽)}
-     * @param int $cut 是否裁切{宽,高必须非0}：1是、0否、-1或'auto'保持等比
-     * @param int $proportion 缩放{0:不缩放, 0<this<1:缩放到相应比例(此时宽高限制和裁切均失效)}
+     * @param  string  $src_img  源图绝对完整地址{带文件名及后缀名}
+     * @param  string  $dst_img  目标图绝对完整地址{带文件名及后缀名}
+     * @param  int  $width  缩略图宽{0:此时目标高度不能为0，目标宽度为源图宽*(目标高度/源图高)}
+     * @param  int  $height  缩略图高{0:此时目标宽度不能为0，目标高度为源图高*(目标宽度/源图宽)}
+     * @param  int  $cut  是否裁切{宽,高必须非0}：1是、0否、-1或'auto'保持等比
+     * @param  int  $proportion  缩放{0:不缩放, 0<this<1:缩放到相应比例(此时宽高限制和裁切均失效)}
      * @return bool
      */
     public static function imgThumb($src_img, $dst_img, $width = 75, $height = 75, $cut = 0, $proportion = 0)
@@ -2523,7 +2662,7 @@ class Base
             return false;
         }
         $ot = pathinfo($dst_img, PATHINFO_EXTENSION);
-        $otfunc = 'image' . ($ot == 'jpg' ? 'jpeg' : $ot);
+        $otfunc = 'image'.($ot == 'jpg' ? 'jpeg' : $ot);
         $srcinfo = getimagesize($src_img);
         $src_w = $srcinfo[0];
         $src_h = $srcinfo[1];
@@ -2531,7 +2670,7 @@ class Base
         if (empty($type)) {
             return false;
         }
-        $createfun = 'imagecreatefrom' . ($type == 'jpg' ? 'jpeg' : $type);
+        $createfun = 'imagecreatefrom'.($type == 'jpg' ? 'jpeg' : $type);
 
         $dst_h = $height;
         $dst_w = $width;
@@ -2576,15 +2715,19 @@ class Base
                         $dst_h = $src_h * ($dst_w / $src_w);
                         $y = 0 - ($dst_h - $height) / 2;
                     }
-                } else if ($dst_w xor $dst_h) {
-                    if ($dst_w && !$dst_h)  //有宽无高
-                    {
-                        $propor = $dst_w / $src_w;
-                        $height = $dst_h = $src_h * $propor;
-                    } else if (!$dst_w && $dst_h)  //有高无宽
-                    {
-                        $propor = $dst_h / $src_h;
-                        $width = $dst_w = $src_w * $propor;
+                } else {
+                    if ($dst_w xor $dst_h) {
+                        if ($dst_w && !$dst_h)  //有宽无高
+                        {
+                            $propor = $dst_w / $src_w;
+                            $height = $dst_h = $src_h * $propor;
+                        } else {
+                            if (!$dst_w && $dst_h)  //有高无宽
+                            {
+                                $propor = $dst_h / $src_h;
+                                $width = $dst_w = $src_w * $propor;
+                            }
+                        }
                     }
                 }
             } else {
@@ -2597,8 +2740,8 @@ class Base
                     $width = $dst_w = $dst_h;
                 }
                 $propor = min(max($dst_w / $src_w, $dst_h / $src_h), 1);
-                $dst_w = (int)round($src_w * $propor);
-                $dst_h = (int)round($src_h * $propor);
+                $dst_w = (int) round($src_w * $propor);
+                $dst_h = (int) round($src_h * $propor);
                 $x = ($width - $dst_w) / 2;
                 $y = ($height - $dst_h) / 2;
             }
@@ -2628,6 +2771,7 @@ class Base
         $otfunc($dst, $dst_img);
         imagedestroy($dst);
         imagedestroy($src);
+
         return true;
     }
 
@@ -2642,7 +2786,7 @@ class Base
             "docx" => 'images/ext/doc.png',
             "xlsx" => 'images/ext/xls.png',
             "pptx" => 'images/ext/ppt.png',
-            "ai", "avi", "bmp", "cdr", "doc", "eps", "gif", "mov", "mp3", "mp4", "pdf", "ppt", "pr", "psd", "rar", "svg", "tif", "txt", "xls", "zip" => 'images/ext/' . $ext . '.png',
+            "ai", "avi", "bmp", "cdr", "doc", "eps", "gif", "mov", "mp3", "mp4", "pdf", "ppt", "pr", "psd", "rar", "svg", "tif", "txt", "xls", "zip" => 'images/ext/'.$ext.'.png',
             default => 'images/ext/file.png',
         };
     }
@@ -2662,6 +2806,7 @@ class Base
 
         if ($m == count($arr)) {
             $result[] = implode(',', $arr);
+
             return $result;
         }
 
@@ -2671,7 +2816,7 @@ class Base
         $temp_list1 = self::getCombinationToString($arr, ($m - 1));
 
         foreach ($temp_list1 as $s) {
-            $s = $temp_firstelement . ',' . $s;
+            $s = $temp_firstelement.','.$s;
             $result[] = $s;
         }
         unset($temp_list1);
@@ -2697,10 +2842,11 @@ class Base
             $k = 0;
             foreach ($arr1 as $k1 => $v1) {
                 foreach ($arr2 as $k2 => $v2) {
-                    $arr[$k] = $v1 . "," . $v2;
+                    $arr[$k] = $v1.",".$v2;
                     $k++;
                 }
             }
+
             return $arr;
         };
         $arr = [];
@@ -2713,6 +2859,7 @@ class Base
             }
         }
         $key = count($arr) - 1;
+
         return array_values($arr[$key]);
     }
 
@@ -2725,16 +2872,17 @@ class Base
         $time = strtotime(date("Y-m-01"));
         $w = date('w', $time);
         $j = date("j");
-        return ceil(($j . $w) / 7);
+
+        return ceil(($j.$w) / 7);
     }
 
     /**
      * 把返回的数据集转换成Tree
-     * @param array $list 要转换的数据集
-     * @param string $pk id标记字段
-     * @param string $pid parent标记字段
-     * @param string $child 生成子类字段
-     * @param int $root
+     * @param  array  $list  要转换的数据集
+     * @param  string  $pk  id标记字段
+     * @param  string  $pid  parent标记字段
+     * @param  string  $child  生成子类字段
+     * @param  int  $root
      * @return array
      */
     public static function list2Tree($list, $pk = 'id', $pid = 'pid', $child = 'children', $root = 0)
@@ -2771,7 +2919,7 @@ class Base
     /**
      * 遍历获取文件
      * @param $dir
-     * @param bool $subdirectory    是否遍历子目录
+     * @param  bool  $subdirectory  是否遍历子目录
      * @return array
      */
     public static function readDir($dir, $subdirectory = true)
@@ -2780,15 +2928,16 @@ class Base
         $dir_list = scandir($dir);
         foreach ($dir_list as $file) {
             if ($file != '..' && $file != '.') {
-                if (is_dir($dir . '/' . $file)) {
+                if (is_dir($dir.'/'.$file)) {
                     if ($subdirectory) {
-                        $files = array_merge($files, self::readDir($dir . '/' . $file, $subdirectory));
+                        $files = array_merge($files, self::readDir($dir.'/'.$file, $subdirectory));
                     }
                 } else {
-                    $files[] = $dir . "/" . $file;
+                    $files[] = $dir."/".$file;
                 }
             }
         }
+
         return $files;
     }
 
@@ -2803,46 +2952,95 @@ class Base
             return '';
         }
         $fchar = ord($str[0]);
-        if ($fchar >= ord('A') && $fchar <= ord('z')) return strtoupper($str[0]);
+        if ($fchar >= ord('A') && $fchar <= ord('z')) {
+            return strtoupper($str[0]);
+        }
         $s1 = iconv('UTF-8', 'gb2312', $str);
         $s2 = iconv('gb2312', 'UTF-8', $s1);
         $s = $s2 == $str ? $s1 : $str;
         $asc = ord($s[0]) * 256 + ord($s[1]) - 65536;
-        if ($asc >= -20319 && $asc <= -20284) return 'A';
-        if ($asc >= -20283 && $asc <= -19776) return 'B';
-        if ($asc >= -19775 && $asc <= -19219) return 'C';
-        if ($asc >= -19218 && $asc <= -18711) return 'D';
-        if ($asc >= -18710 && $asc <= -18527) return 'E';
-        if ($asc >= -18526 && $asc <= -18240) return 'F';
-        if ($asc >= -18239 && $asc <= -17923) return 'G';
-        if ($asc >= -17922 && $asc <= -17418) return 'H';
-        if ($asc >= -17417 && $asc <= -16475) return 'J';
-        if ($asc >= -16474 && $asc <= -16213) return 'K';
-        if ($asc >= -16212 && $asc <= -15641) return 'L';
-        if ($asc >= -15640 && $asc <= -15166) return 'M';
-        if ($asc >= -15165 && $asc <= -14923) return 'N';
-        if ($asc >= -14922 && $asc <= -14915) return 'O';
-        if ($asc >= -14914 && $asc <= -14631) return 'P';
-        if ($asc >= -14630 && $asc <= -14150) return 'Q';
-        if ($asc >= -14149 && $asc <= -14091) return 'R';
-        if ($asc >= -14090 && $asc <= -13319) return 'S';
-        if ($asc >= -13318 && $asc <= -12839) return 'T';
-        if ($asc >= -12838 && $asc <= -12557) return 'W';
-        if ($asc >= -12556 && $asc <= -11848) return 'X';
-        if ($asc >= -11847 && $asc <= -11056) return 'Y';
-        if ($asc >= -11055 && $asc <= -10247) return 'Z';
+        if ($asc >= -20319 && $asc <= -20284) {
+            return 'A';
+        }
+        if ($asc >= -20283 && $asc <= -19776) {
+            return 'B';
+        }
+        if ($asc >= -19775 && $asc <= -19219) {
+            return 'C';
+        }
+        if ($asc >= -19218 && $asc <= -18711) {
+            return 'D';
+        }
+        if ($asc >= -18710 && $asc <= -18527) {
+            return 'E';
+        }
+        if ($asc >= -18526 && $asc <= -18240) {
+            return 'F';
+        }
+        if ($asc >= -18239 && $asc <= -17923) {
+            return 'G';
+        }
+        if ($asc >= -17922 && $asc <= -17418) {
+            return 'H';
+        }
+        if ($asc >= -17417 && $asc <= -16475) {
+            return 'J';
+        }
+        if ($asc >= -16474 && $asc <= -16213) {
+            return 'K';
+        }
+        if ($asc >= -16212 && $asc <= -15641) {
+            return 'L';
+        }
+        if ($asc >= -15640 && $asc <= -15166) {
+            return 'M';
+        }
+        if ($asc >= -15165 && $asc <= -14923) {
+            return 'N';
+        }
+        if ($asc >= -14922 && $asc <= -14915) {
+            return 'O';
+        }
+        if ($asc >= -14914 && $asc <= -14631) {
+            return 'P';
+        }
+        if ($asc >= -14630 && $asc <= -14150) {
+            return 'Q';
+        }
+        if ($asc >= -14149 && $asc <= -14091) {
+            return 'R';
+        }
+        if ($asc >= -14090 && $asc <= -13319) {
+            return 'S';
+        }
+        if ($asc >= -13318 && $asc <= -12839) {
+            return 'T';
+        }
+        if ($asc >= -12838 && $asc <= -12557) {
+            return 'W';
+        }
+        if ($asc >= -12556 && $asc <= -11848) {
+            return 'X';
+        }
+        if ($asc >= -11847 && $asc <= -11056) {
+            return 'Y';
+        }
+        if ($asc >= -11055 && $asc <= -10247) {
+            return 'Z';
+        }
+
         return '#';
     }
 
     /**
      * 缓存数据
      * @param $name
-     * @param null $value
+     * @param  null  $value
      * @return mixed|null
      */
     public static function cacheData($name, $value = null)
     {
-        $name = "cacheData::" . $name;
+        $name = "cacheData::".$name;
         $tmp = Tmp::whereName($name)->select('value')->first();
         if ($value !== null) {
             if (empty($tmp)) {
@@ -2850,6 +3048,7 @@ class Base
             } else {
                 Tmp::whereName($name)->update(['value' => $value]);
             }
+
             return $value;
         } else {
             return $tmp->value;
@@ -2858,16 +3057,22 @@ class Base
 
     /**
      * 计算两点地理坐标之间的距离
-     * @param float $startLong 起点经度
-     * @param float $startLat 起点纬度
-     * @param float $endLong 终点经度
-     * @param float $endLat 终点纬度
-     * @param Int $unit 单位 1:米 2:公里
-     * @param Int $decimal 精度 保留小数位数
+     * @param  float  $startLong  起点经度
+     * @param  float  $startLat  起点纬度
+     * @param  float  $endLong  终点经度
+     * @param  float  $endLat  终点纬度
+     * @param  Int  $unit  单位 1:米 2:公里
+     * @param  Int  $decimal  精度 保留小数位数
      * @return float
      */
-    public static function getDistance(float $startLong, float $startLat, float $endLong, float $endLat, $unit = 2, $decimal = 2): float
-    {
+    public static function getDistance(
+        float $startLong,
+        float $startLat,
+        float $endLong,
+        float $endLat,
+        $unit = 2,
+        $decimal = 2
+    ): float {
 
         $EARTH_RADIUS = 6370.996; // 地球半径系数
         $PI = 3.1415926;
@@ -2903,7 +3108,8 @@ class Base
         if (preg_match('/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s*:\s*xmt\/rcv\/\%loss/i', $original)) {
             $strings = explode("\n", $original);
             foreach ($strings as $string) {
-                preg_match("/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s*:\s*xmt\/rcv\/\%loss\s*\=\s*(.*?)%(\,\s*min\/avg\/max\s*\=\s*(\d+.?\d+)\/(\d+.?\d+)\/(\d+.?\d+))*/i", $string, $match);
+                preg_match("/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s*:\s*xmt\/rcv\/\%loss\s*\=\s*(.*?)%(\,\s*min\/avg\/max\s*\=\s*(\d+.?\d+)\/(\d+.?\d+)\/(\d+.?\d+))*/i",
+                    $string, $match);
                 if ($match) {
                     $ipSpeeds[$match[1]] = isset($match[5]) ? max(1, intval($match[5])) : 0;
                 }
@@ -2921,15 +3127,18 @@ class Base
                         $ipSpeeds[$strings[$i]] = max(1, intval($matches[1]));
                         continue;
                     }
-                    preg_match("/min\/avg\/max\/(sdev|stddev)\s*\=\s*(\d+.?\d+)\/(\d+.?\d+)\/(\d+.?\d+)\//i", $context, $matches);
+                    preg_match("/min\/avg\/max\/(sdev|stddev)\s*\=\s*(\d+.?\d+)\/(\d+.?\d+)\/(\d+.?\d+)\//i", $context,
+                        $matches);
                     if ($matches && intval($matches[3]) > 0) {
                         $ipSpeeds[$strings[$i]] = max(1, intval($matches[3]));
-                    } elseif (Base::strExists($context, '100% packet loss') || Base::strExists($context, '100.00% packet loss')) {
+                    } elseif (Base::strExists($context, '100% packet loss') || Base::strExists($context,
+                            '100.00% packet loss')) {
                         $ipSpeeds[$strings[$i]] = 0;
                     }
                 }
             }
         }
+
         return $ipSpeeds;
     }
 
@@ -2945,16 +3154,17 @@ class Base
         foreach ($arr as $value) {
             $ipHex = dechex($value); // 将每段ip转换成16进制
             if (strlen($ipHex) < 2) {
-                $ipHex = '0' . $ipHex;//如果转换后的16进制数长度小于2，在其前面加一个0
+                $ipHex = '0'.$ipHex;//如果转换后的16进制数长度小于2，在其前面加一个0
             }
             $hex .= $ipHex; // 将四段IP的16进制数连接起来，得到一个16进制字符串，长度为8
         }
+
         return $hex;
     }
 
     /**
      * 字符串配置项转数组
-     * @param String $stringConfig
+     * @param  String  $stringConfig
      * @return array
      */
     public static function stringConfig2Array(string $stringConfig): array
@@ -2981,12 +3191,13 @@ class Base
                 }
             }
         }
+
         return $data;
     }
 
     /**
      * 二维数组交叉排列组合
-     * @param array $ip
+     * @param  array  $ip
      * @return array
      */
     public static function crossJoin(array $ip)
@@ -3010,6 +3221,7 @@ class Base
             }
         }
         $matrix = array_unique($matrix, SORT_REGULAR);
+
         return array_merge($matrix);
     }
 
@@ -3022,7 +3234,8 @@ class Base
     {
         $i = floor(log($bytes) / log(1024));
         $sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-        return sprintf('%.02F', $bytes / pow(1024, $i)) * 1 . ' ' . $sizes[$i];
+
+        return sprintf('%.02F', $bytes / pow(1024, $i)) * 1 .' '.$sizes[$i];
     }
 
     /**
@@ -3045,13 +3258,14 @@ class Base
      * @param $data
      * @param $messages
      */
-    public static function validator($data, $messages) {
+    public static function validator($data, $messages)
+    {
         $rules = [];
         foreach ($messages as $key => $item) {
             $keys = explode(".", $key);
             if (isset($keys[1])) {
                 if (isset($rules[$keys[0]])) {
-                    $rules[$keys[0]] = $rules[$keys[0]] . '|' . $keys[1];
+                    $rules[$keys[0]] = $rules[$keys[0]].'|'.$keys[1];
                 } else {
                     $rules[$keys[0]] = $keys[1];
                 }

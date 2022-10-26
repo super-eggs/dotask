@@ -348,8 +348,8 @@ class Project extends AbstractModel
                     'data' => $data,
                 ]
             ];
-            $task = new PushTask($params, false);
-            Task::deliver($task);
+//            $task = new PushTask($params, false);
+//            Task::deliver($task);
         }
     }
 

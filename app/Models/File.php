@@ -288,8 +288,8 @@ class File extends AbstractModel
             'userid' => $userid,
             'msg' => $msg
         ];
-        $task = new PushTask($params, false);
-        Task::deliver($task);
+//        $task = new PushTask($params, false);
+//        Task::deliver($task);
     }
 
     /**
